@@ -38,4 +38,13 @@ export default defineConfig({
 
 
    # Task-2
-   
+   - created appComponents folder
+     - created Container.jsx file
+     - created NavBar.jsx file
+
+   - Installed react router
+   - wrote the routes in App level!
+   - created Login.jsx file
+   - Install axios
+   - Install redux toolkit
+   - created userSlice.js file
