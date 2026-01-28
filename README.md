@@ -7,7 +7,7 @@
    - npm install tailwindcss @tailwindcss/vite
 - Install shadcn/ui and setup
    - create jsconfig.json
-       - {
+{
   "files": [],
   "references": [],
   "compilerOptions": {
@@ -19,7 +19,7 @@
 }
    - npm install -D @types/node
    - In vite.config.js
-       - import path from "path"
+import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
