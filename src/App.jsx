@@ -8,6 +8,8 @@ import { Block } from "./appComponents/Block";
 import { Login } from "./appComponents/Login";
 import { Provider } from "react-redux";
 import  appStore from './utils/appStore';
+import { Profile } from './appComponents/Profile';
+import { ProfileEdit } from './appComponents/ProfileEdit';
 
 function App() {
   return (
@@ -21,6 +23,9 @@ function App() {
             <Route path="/friends" element={<Friends />} />
             <Route path="/block" element={<Block />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />}>
+              <Route path="edit" element={<ProfileEdit />}/>
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

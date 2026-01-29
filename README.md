@@ -48,3 +48,7 @@ export default defineConfig({
    - Install axios
    - Install redux toolkit
    - created userSlice.js file
+   - created feedSlice.js file
+   - created requestSlice.js file
+   - created friendsSlice.js file
+   - created constants.js file

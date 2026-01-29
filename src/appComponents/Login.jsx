@@ -25,12 +25,13 @@ import axios from "axios";
 import { BASE_URL } from '../utils/constants';
 import { useDispatch } from "react-redux";
 import { addUser } from '../utils/userSlice';
+import { useNavigate } from "react-router";
 
 export const Login = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("ganesh@gmail.com");
+  const [password, setPassword] = useState("Ganesh2@123");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [location, setLocation] = useState("");
@@ -38,19 +39,45 @@ export const Login = () => {
   const [bgImage, setBgImage] = useState("");
   const [about, setAbout] = useState("");
 
-  const [toggleForm, setToggleForm] = useState(true);
+  const [toggleForm, setToggleForm] = useState(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // submit form
-  const handleSubmit = async () => {
+  // submit Sign in form
+  const handleSignInSubmit = async () => {
     try{
       const signInData = await axios.post(BASE_URL + '/signin', {
         emailId : email,
         password: password,
       }, {withCredentials: true})
 
-      dispatch(addUser(signInData.data.data))
+      dispatch(addUser(signInData.data.data));
+      navigate('/feed');
+    }
+    catch(err){
+      console.log(err)
+    }
+  };
+
+  
+  // submit Sign Up form
+    const handleSignUpSubmit = async () => {
+    try{
+      const data = {
+        firstName,
+        lastName,
+        emailId : email,
+        password,
+        age,
+        gender,
+        location,
+        about
+      }
+      const signUpData = await axios.post(BASE_URL + '/signup', data)
+
+      dispatch(addUser(signUpData.data.data));
+      setToggleForm(false)
     }
     catch(err){
       console.log(err)
@@ -59,7 +86,7 @@ export const Login = () => {
 
   return (
     <>
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm mx-auto">
         <CardHeader>
           <CardTitle>{toggleForm ? "Create your account" : "Login to your account"}</CardTitle>
           <CardDescription>
@@ -144,7 +171,7 @@ export const Login = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Select value={gender} onChange={setGender}>
+                <Select value={gender} onValueChange={setGender}>
                   <SelectTrigger className="w-full max-w-48">
                     <SelectValue placeholder="Select your Gender" />
                   </SelectTrigger>
@@ -208,7 +235,7 @@ export const Login = () => {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full" onClick={handleSubmit}>
+          <Button type="submit" className="w-full bg-purple-900" onClick={toggleForm ? handleSignUpSubmit : handleSignInSubmit}>
             {toggleForm ? "Sign Up" : "Login"}
           </Button>
           <Button variant="outline" className="w-full">

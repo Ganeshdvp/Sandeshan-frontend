@@ -1,31 +1,16 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Link } from 'react-router';
-import { Feed } from "./Feed";
-import { Requests } from "./Requests";
-import { Friends } from "./Friends";
-import { Block } from "./Block";
 
 export const AppTabs = () => {
   return (
-    <Tabs defaultValue="feed" className="w-100">
-      <TabsList>
-        <Link to='/feed'><TabsTrigger value="feed">Feed</TabsTrigger></Link>
-        <Link to='/requests'><TabsTrigger value="requests">Requests</TabsTrigger></Link>
-        <Link to='/friends'><TabsTrigger value="friends">Friends</TabsTrigger></Link>
-        <Link to='/block'><TabsTrigger value="block">Block users</TabsTrigger></Link>
+    <Tabs defaultValue="feed" className="mx-auto w-100 h-12 bg-black flex items-center rounded-2xl shadow-[0_10px_22px_rgba(168,85,247,0.35)]
+">
+      <TabsList className="bg-purple-800 text-white">
+        <Link to='/feed'><TabsTrigger value="feed" className='w-20 active:scale-120 cursor-pointer hover:text-white'>Feed</TabsTrigger></Link>
+        <Link to='/requests'><TabsTrigger value="requests" className='w-20 active:scale-120 cursor-pointer hover:text-white'>Requests</TabsTrigger></Link>
+        <Link to='/friends'><TabsTrigger value="friends" className='w-20 active:scale-120 cursor-pointer hover:text-white'>Friends</TabsTrigger></Link>
+        <Link to='/block'><TabsTrigger value="block" className='w-24 active:scale-120 cursor-pointer hover:text-white'>Block users</TabsTrigger></Link>
       </TabsList>
-      {/* <TabsContent value="feed">
-        <Feed/>
-      </TabsContent>
-      <TabsContent value="requests">
-        <Requests/>
-      </TabsContent>
-      <TabsContent value="friends">
-        <Friends/>
-      </TabsContent>
-      <TabsContent value="block">
-       <Block/>
-      </TabsContent> */}
     </Tabs>
   )
 }
