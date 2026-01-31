@@ -24,7 +24,7 @@ export const Container = () => {
       if(err.status === 401){
         navigate('/login')
       }
-      console.log(err.message)
+      console.log(err.response.data.message)
     }
   }
 

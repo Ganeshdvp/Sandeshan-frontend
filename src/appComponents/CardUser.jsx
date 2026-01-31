@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Badge } from "../components/ui/badge"
 import { Button } from "../components/ui/button"
 import {
   Card,
@@ -11,21 +10,32 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { BASE_URL } from '../utils/constants';
+import { useState } from "react";
+import { Spinner } from '../components/ui/spinner';
 
 
 export const CardUser = ({data}) => {
 
     const {_id, ProfileImage, firstName, lastName, age, gender, location, about} = data
 
+    const [pending, setPending] = useState(false);
+    const [sent, setSent] = useState(false);
+    const [error, setError] = useState("")
+
     // sent request logic
     const handleSendRequest = async ()=>{
       try{
+        setPending(true)
         const sendRequest = await axios.post(BASE_URL + `/user/requested/${_id}`, {}, {
           withCredentials: true
         });
+        setPending(false)
+        setSent(true)
         console.log(sendRequest);
       }
       catch(err){
+        setPending(false);
+        setError("* " + err.response.data.message)
         console.log(err);
       }
     }
@@ -55,7 +65,9 @@ transition-shadow duration-300 cursor-pointer">
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full bg-purple-950 cursor-pointer" onClick={handleSendRequest}>Send request</Button>
+        <Button disabled={sent || error} className="w-full bg-purple-950 cursor-pointer" onClick={handleSendRequest}>
+          {pending ? <Spinner/> : (sent ? "Sent Successfully!" : (error? <p className="text-red-700">Failed to send!</p> : "Send request"))}
+        </Button>
       </CardFooter>
     </Card>
     </>

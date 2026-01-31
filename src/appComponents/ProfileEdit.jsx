@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sheet";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Edit2Icon, EditIcon } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from '../utils/constants';
@@ -121,7 +121,10 @@ transition-shadow duration-300'>
               <Input id="sheet-demo-gmail" type='email' disabled defaultValue={store?.emailId}/>
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="sheet-demo-password">Password</Label>
+              <div className="flex justify-between items-center">
+                <Label htmlFor="sheet-demo-password">Password</Label>
+                <Link to='/profile/forgot-password'><p className="text-[12px] underline cursor-pointer">Forgot password</p></Link>
+              </div>
               <Input
                 id="sheet-demo-password"
                 type="password"
