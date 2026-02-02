@@ -12,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { addBlock } from '../utils/blockSlice';
 import { Spinner } from '../components/ui/spinner';
+import {toast} from 'sonner';
+import { NotFound } from "./NotFound";
+import { Link } from "react-router";
 
 
 export const Friends = () => {
@@ -42,7 +44,20 @@ export const Friends = () => {
     try{
       setUnFriendLoading(id)
       await axios.delete(BASE_URL + `/unfriend/${id}`, {withCredentials:true})
-      setUnFriendLoading("")
+      setUnFriendLoading("");
+      toast.success("Successfully removed!", {
+                    position: "bottom-right",
+                    style:{
+                      background:'#0D0000',
+                      color:'#ffff',
+                      borderRadius:'5px',
+                      fontSize:'12px',
+                      width: "250px",
+                      height:'40px',
+                      border: 'none',
+                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
+                    }
+      });
     }
     catch(err){
       setUnFriendLoading("")
@@ -57,7 +72,20 @@ export const Friends = () => {
       await axios.post(BASE_URL + `/blocked/${id}`, {}, {
         withCredentials:true
       });
-      setBlockLoading("")
+      setBlockLoading("");
+      toast.success("You blocked successfully!", {
+                    position: "bottom-right",
+                    style:{
+                      background:'#0D0000',
+                      color:'#ffff',
+                      borderRadius:'5px',
+                      fontSize:'12px',
+                      width: "250px",
+                      height:'40px',
+                      border: 'none',
+                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
+                    }
+      });
     }
     catch(err){
       setBlockLoading("")
@@ -74,7 +102,7 @@ export const Friends = () => {
 
   return (
      <div className="flex flex-wrap gap-y-8 mt-12 w-full p-6">
-        {store?.map((request) => {
+        {store?.length > 0 ? store?.map((request) => {
           return (
             <>
               <Card className="relative mx-auto w-75 max-w-sm pt-0 bg-purple-800 border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)] hover:scale-102 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)]
@@ -99,13 +127,14 @@ transition-shadow duration-300 cursor-pointer" key={request?._id}>
                   </div>
                 </CardContent>
                 <CardFooter className='flex items-center gap-x-2 justify-end'>
+                  <Link to={`/chat/${request?._id}`}><Button className=' bg-purple-950 cursor-pointer'>Chat</Button></Link>
                   <Button className=' bg-purple-950 cursor-pointer' onClick={()=> handleUnFriend(request?._id)}>{unfriendLoading === request?._id ? <Spinner/> : "Un Friend"}</Button>
                   <Button className='bg-transparent border cursor-pointer hover:bg-gray-300 hover:text-black' onClick={()=> handleBlockUsers(request?._id)}>{blockLoading === request?._id ? <Spinner/> : "Block"}</Button>
                 </CardFooter>
               </Card>
             </>
           );
-        })}
+        }) : <NotFound title= 'Friends' /> }
       </div>
   )
 }

@@ -18,10 +18,11 @@ import {
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
-import { Edit2Icon, EditIcon } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from '../utils/constants';
 import { addUser } from '../utils/userSlice';
+import { toast } from 'sonner';
+import { Spinner } from '../components/ui/spinner';
 
 
 export const ProfileEdit = () => {
@@ -34,31 +35,53 @@ export const ProfileEdit = () => {
   const [age, setAge] = useState(`${store?.age}`);
   const [gender, setGender] = useState(`${store?.gender}`);
   const [location, setLocation] = useState(`${store?.location}`);
-  const [profileImage, setProfileImage] = useState("");
-  const [bgImage, setBgImage] = useState("");
+  const [profileImage, setProfileImage] = useState(`${store?.ProfileImage}`);
+  const [bgImage, setBgImage] = useState(`${store?.bgImage}`);
   const [about, setAbout] = useState(`${store?.about}`);
 
   const [open, setOpen] = useState(true);
 
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("")
+
   const handleSaveChanges = async ()=>{
     try{
+      setLoading(true);
       const edit = {
         firstName,
         lastName,
         age,
         gender,
         location,
-        about
+        about,
+        ProfileImage: profileImage,
+        bgImage: bgImage
       }
       const editData = await axios.patch(BASE_URL + '/profile/edit', edit, {
         withCredentials: true
       })
       dispatch(addUser(editData.data.data));
+      setLoading(false)
       setOpen(false);
+      toast.success("Profile was updated successfully!", {
+                    position: "top-right",
+                    style:{
+                      background:'#8B00E7',
+                      color:'#ffff',
+                      borderRadius:'5px',
+                      fontSize:'12px',
+                      width: "250px",
+                      height:'40px',
+                      border: 'none',
+                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
+                    }
+                  });
     }
     catch(err){
+         setLoading(false);
+         setError(err.response.data.message)
       console.log(err)
     }
   }
@@ -83,26 +106,12 @@ transition-shadow duration-300'>
           <div className="grid flex-1 auto-rows-min gap-6 px-4">
             <div className="grid gap-3">
               <img src={store?.bgImage} alt="bg-image" className="rounded-2xl"/>
-              <div
-                className="relative -top-6 left-[90%] flex items-center justify-center
-                  w-6 h-6 rounded-full bg-black/70 cursor-pointer
-                  hover:bg-black transition"
-              >
-                <Edit2Icon className="w-4 h-4 text-white" />
-              </div>
             </div>
             <div className="grid gap-3">
               <Avatar className="w-35 h-35 absolute top-60 left-[30%]">
                 <AvatarImage src={store?.ProfileImage} alt="profile-image" />
                 <AvatarFallback>Profile Image</AvatarFallback>
               </Avatar>
-              <div
-                className="relative -top-6 left-50 flex items-center justify-center
-                  w-6 h-6 rounded-full bg-black/70 cursor-pointer
-                  hover:bg-black transition"
-              >
-                <EditIcon className="w-4 h-4 text-white" />
-              </div>
             </div>
             <div className="grid gap-3">
               <Label htmlFor="sheet-demo-about">About</Label>
@@ -152,9 +161,18 @@ transition-shadow duration-300'>
               <Label htmlFor="sheet-demo-location">Location</Label>
               <Input id="sheet-demo-location" type='text' value={location} onChange={e=> setLocation(e.target.value)} />
             </div>
+            <div className="grid gap-3">
+              <Label htmlFor="sheet-demo-profileImage">Profile Image</Label>
+              <Input id="sheet-demo-location" type='text' value={profileImage} onChange={e=> setProfileImage(e.target.value)} />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="sheet-demo-profileImage">Background Image</Label>
+              <Input id="sheet-demo-location" type='text' value={bgImage} onChange={e=> setBgImage(e.target.value)} />
+            </div>
           </div>
+          <p className="text-red-700 text-[12px]">{error}</p>
           <SheetFooter>
-            <Button type="submit" onClick={handleSaveChanges} className='bg-purple-900 hover:bg-purple-800 cursor-pointer'>Save changes</Button>
+            <Button type="submit" onClick={handleSaveChanges} className='bg-purple-900 hover:bg-purple-800 cursor-pointer'>{loading ? <Spinner/> : "Save Changes"}</Button>
             <SheetClose asChild>
               <Button variant="outline" className='cursor-pointer text-black bg-gray-600 border-0'>Close</Button>
             </SheetClose>

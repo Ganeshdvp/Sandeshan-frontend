@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import { NotFound } from './NotFound';
 
 
 export const Block = () => {
@@ -34,6 +35,27 @@ export const Block = () => {
     }
   }
 
+  // UnBlock logic
+  const handleUnBlock = async (id)=>{
+    try{
+      console.log(id)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  // remove logic
+    const handleRemove = async (id)=>{
+    try{
+      console.log(id)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+
   useEffect(()=>{
     if(!store){
       fetchBlockUsers();
@@ -44,7 +66,7 @@ export const Block = () => {
   return (
     <>
      <div className="flex flex-wrap mt-20">
-        {store?.map((request) => {
+        {store?.length > 0 ? store?.map((request) => {
           return (
             <>
               <Card className="relative mx-auto w-75 max-w-sm pt-0 bg-purple-800 border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)] hover:scale-102 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)]
@@ -69,13 +91,13 @@ transition-shadow duration-300 cursor-pointer" key={request?._id}>
                   </div>
                 </CardContent>
                 <CardFooter className='flex items-center gap-x-2 justify-end'>
-                  <Button className=' bg-purple-950 cursor-pointer'>Unblock</Button>
-                  <Button className='bg-transparent border cursor-pointer hover:bg-gray-300 hover:text-black'>Remove</Button>
+                  <Button className=' bg-purple-950 cursor-pointer' onClick={()=> handleUnBlock(request._id)}>Unblock</Button>
+                  <Button className='bg-transparent border cursor-pointer hover:bg-gray-300 hover:text-black' onClick={()=> handleRemove(request._id)}>Remove</Button>
                 </CardFooter>
               </Card>
             </>
           );
-        })}
+        }) : <NotFound title='Blocked users' />}
       </div>
     </>
   )

@@ -13,6 +13,8 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { Spinner } from '../components/ui/spinner';
+import {toast} from 'sonner';
+import { NotFound } from "./NotFound";
 
 
 export const Requests = () => {
@@ -42,7 +44,20 @@ export const Requests = () => {
       await axios.post(BASE_URL + `/requests/${accepted}/${id}`, {}, {
         withCredentials:true
       });
-      setAcceptLoading("")
+      setAcceptLoading("");
+      toast.success("Aceepted the request successfully!", {
+                    position: "top-right",
+                    style:{
+                      background:'#8B00E7',
+                      color:'#ffff',
+                      borderRadius:'5px',
+                      fontSize:'12px',
+                      width: "250px",
+                      height:'40px',
+                      border: 'none',
+                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
+                    }
+                  });
     }
     catch(err){
       setAcceptLoading("")
@@ -57,7 +72,20 @@ export const Requests = () => {
         await axios.post(BASE_URL + `/requests/${rejected}/${id}`, {}, {
         withCredentials: true
       });
-      setRejectLoading("")
+      setRejectLoading("");
+      toast.success("Rejected the request successfully!", {
+                    position: "bottom-right",
+                    style:{
+                      background:'#0D0000',
+                      color:'#ffff',
+                      borderRadius:'5px',
+                      fontSize:'12px',
+                      width: "250px",
+                      height:'40px',
+                      border: 'none',
+                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
+                    }
+                  });
     }
     catch(err){
       setRejectLoading("")
@@ -75,7 +103,7 @@ export const Requests = () => {
   return (
     <>
       <div className="flex flex-wrap gap-y-8 mt-12 w-full p-6">
-        {store?.map((request) => {
+        {store?.length > 0 ?  store?.map((request) => {
           return (
             <>
               <Card className="relative mx-auto w-75 max-w-sm pt-0 bg-purple-800 border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)] hover:scale-102 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)]
@@ -106,7 +134,7 @@ transition-shadow duration-300 cursor-pointer">
               </Card>
             </>
           );
-        })}
+        }) : <NotFound title='Requests' />}
       </div>
     </>
   );

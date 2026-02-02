@@ -2,7 +2,6 @@ import axios from "axios";
 import { Button } from "../components/ui/button"
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -12,7 +11,7 @@ import {
 import { BASE_URL } from '../utils/constants';
 import { useState } from "react";
 import { Spinner } from '../components/ui/spinner';
-
+import { toast } from "sonner"
 
 export const CardUser = ({data}) => {
 
@@ -25,13 +24,25 @@ export const CardUser = ({data}) => {
     // sent request logic
     const handleSendRequest = async ()=>{
       try{
-        setPending(true)
-        const sendRequest = await axios.post(BASE_URL + `/user/requested/${_id}`, {}, {
+        setPending(true);
+        await axios.post(BASE_URL + `/user/requested/${_id}`, {}, {
           withCredentials: true
         });
-        setPending(false)
-        setSent(true)
-        console.log(sendRequest);
+        setPending(false);
+        setSent(true);
+        toast.success("Request sent successfully!", {
+                    position: "top-right",
+                    style:{
+                      background:'#8B00E7',
+                      color:'#ffff',
+                      borderRadius:'5px',
+                      fontSize:'12px',
+                      width: "250px",
+                      height:'40px',
+                      border: 'none',
+                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
+                    }
+                  });
       }
       catch(err){
         setPending(false);

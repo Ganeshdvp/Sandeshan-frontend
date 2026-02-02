@@ -34,7 +34,7 @@ export const Feed = () => {
 
   return (
     <>
-    <div className="flex flex-wrap gap-y-8 mt-12 w-full p-6">
+    <div className="flex flex-wrap gap-y-8 mt-12 w-full p-6 bg-black">
       {
       store?.map((card)=>{
         return (

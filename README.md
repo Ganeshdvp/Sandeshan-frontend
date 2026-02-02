@@ -43,12 +43,27 @@ export default defineConfig({
      - created NavBar.jsx file
 
    - Installed react router
-   - wrote the routes in App level!
+   - wrote the routes in AppRouting.jsx file!
    - created Login.jsx file
    - Install axios
    - Install redux toolkit
+   - created appStore.js file
    - created userSlice.js file
    - created feedSlice.js file
    - created requestSlice.js file
    - created friendsSlice.js file
    - created constants.js file
+   - created blockSlice.js file
+
+   # Task-3
+   - created AppTabs.jsx file
+   - created Feed.jsx file
+   - created CardUser.jsx file
+   - created Requests.jsx file
+   - created Friends.jsx file
+   - created Block.jsx file
+   - created Profile.jsx file
+   - created ProfileEdit.jsx file
+   - created ForgotPassword.jsx file
+   - created DropDown.jsx file
+   - Protected Routes

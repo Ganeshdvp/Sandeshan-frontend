@@ -14,7 +14,9 @@ import { removeUser } from "../utils/userSlice";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
 import { removeFeed } from '../utils/feedSlice';
-import { removeRequest } from '../utils/requestSlice'
+import { removeRequest } from '../utils/requestSlice';
+import { removeFriend } from '../utils/friendsSlice';
+import { removeBlock } from '../utils/blockSlice';
 
 export const DropDown = ({ children }) => {
   const dispatch = useDispatch();
@@ -24,9 +26,11 @@ export const DropDown = ({ children }) => {
   const handleSignout = async () => {
     try {
       await axios.post(BASE_URL + "/signout", {}, { withCredentials: true });
-      dispatch(removeUser(null));
-      dispatch(removeRequest(null));
-      dispatch(removeFeed(null))
+      dispatch(removeUser());
+      dispatch(removeRequest());
+      dispatch(removeFeed());
+      dispatch(removeFriend())
+      dispatch(removeBlock())
       navigate("/login");
     } catch (err) {
       console.log(err);

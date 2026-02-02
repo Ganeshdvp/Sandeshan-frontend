@@ -32,13 +32,11 @@ import { Link } from 'react-router';
 export const Login = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("ganesh@gmail.com");
-  const [password, setPassword] = useState("Ganesh2@123");
+  const [email, setEmail] = useState("shiva@gmail.com");
+  const [password, setPassword] = useState("Shiva3@123");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [location, setLocation] = useState("");
-  const [profileImage, setProfileImage] = useState("");
-  const [bgImage, setBgImage] = useState("");
   const [about, setAbout] = useState("Hey there! Welcome to the Profile!");
 
   const [toggleForm, setToggleForm] = useState(false);
@@ -88,8 +86,6 @@ export const Login = () => {
         gender,
         location,
         about,
-        ProfileImage: profileImage,
-        bgImage: bgImage
       }
       await axios.post(BASE_URL + '/signup', data)
       setLoading(false)
@@ -105,7 +101,7 @@ export const Login = () => {
   return (
     <>
     <div className="absolute w-full h-full inset-1 bg-black/80 top-0 left-0 right-0 bottom-0">
-       <Card className={toggleForm ? "max-w-lg h-150 mx-auto mt-20 border-0 bg-purple-800 overflow-y-scroll shadow-[0_0_22px_rgba(168,85,247,0.35)] no-scrollbar" : "w-full max-w-md h-100 mx-auto mt-30 bg-purple-800 border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)]"}>
+       <Card className={toggleForm ? "max-w-lg h-150 mx-auto mt-20 border-0 bg-purple-800 overflow-y-scroll shadow-[0_0_22px_rgba(168,85,247,0.35)] no-scrollbar" : "w-full max-w-md h-fit mx-auto mt-30 bg-purple-800 border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)]"}>
         <CardHeader>
           <CardTitle className='text-2xl text-white'>{toggleForm ? "Create your account" : "Login to your account"}</CardTitle>
           <CardDescription  className='text-gray-300'>
@@ -210,28 +206,6 @@ export const Login = () => {
                   required
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2 text-white">
-                <Label htmlFor="profileImage">Profile Image</Label>
-                <Input
-                  id="profileImage"
-                  type="text"
-                  required
-                  placeholder='Enter image url...'
-                  value={profileImage}
-                  onChange={(e) => setProfileImage(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2 text-white">
-                <Label htmlFor="bgImage">Background Image</Label>
-                <Input
-                  id="bgImage"
-                  type="text"
-                  placeholder='Enter image url...'
-                  required
-                  value={bgImage}
-                  onChange={(e) => setBgImage(e.target.value)}
                 />
               </div>
                <div className="grid gap-2 text-white">

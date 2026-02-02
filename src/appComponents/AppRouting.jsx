@@ -13,6 +13,9 @@ import { Login } from "./Login";
 import { Profile } from "./Profile";
 import { ProfileEdit } from "./ProfileEdit";
 import { ForgotPassword } from "./ForgotPassword";
+import { Chat } from "./Chat";
+import { HeroPage } from './HeroPage';
+
 
 export const AppRouting = () => {
   const user = useSelector((store) => store?.user);
@@ -55,6 +58,14 @@ export const AppRouting = () => {
               element: <ForgotPassword />,
             },
           ],
+        },
+        {
+          path: "chat/:targetId",
+          element: <Chat />,
+        },
+         {
+          path: "hero",
+          element: <HeroPage />,
         },
       ],
     },
