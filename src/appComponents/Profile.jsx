@@ -36,8 +36,8 @@ export const Profile = () => {
                   <AvatarImage src={store?.ProfileImage} alt="profile-image" />
                   <AvatarFallback>Profile Image</AvatarFallback>
                 </Avatar>
-                <Link to='/profile/edit'>
-                <p className="m-8 mt-20 rounded-sm p-2 flex items-center gap-x-1 cursor-pointer"><Edit2Icon size={14}/> Edit</p>
+                <Link to='/main/profile/edit'>
+                <p className="text-[12px] m-8 mt-20 rounded-sm p-2 flex items-center gap-x-1 cursor-pointer hover:underline hover:scale-105"><Edit2Icon size={14}/> Edit</p>
                 </Link>
                 </div>
               </div>

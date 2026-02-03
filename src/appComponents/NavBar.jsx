@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage, AvatarBadge } from "@/components/ui/avatar";
 import { useSelector } from "react-redux";
 import { DropDown } from "./DropDown";
+import { AppTabs } from "./AppTabs";
 
 
 export const NavBar = () => {
@@ -11,6 +12,7 @@ export const NavBar = () => {
     <>
       <div className="flex justify-between p-8 bg-black">
         <h1 className="text-white font-bold text-2xl">SANDESHAN</h1>
+        <AppTabs/>
        {
         store && (
            <div className="flex gap-x-6 items-center">

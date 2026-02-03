@@ -94,7 +94,7 @@ export const ProfileEdit = () => {
           navigate(-1);
         }}
       >
-        <SheetContent className='overflow-y-auto bg-black text-white border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)] hover:scale-102 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)]
+        <SheetContent className='overflow-y-auto bg-black text-white border-0 shadow-[0_0_22px_rgba(255,255,255,0.35)] hover:scale-102 hover:shadow-[0_0_30px_rgba(255,255,255,0.7)]
 transition-shadow duration-300'>
           <SheetHeader>
             <SheetTitle className='text-white'>Edit profile</SheetTitle>
@@ -113,7 +113,7 @@ transition-shadow duration-300'>
                 <AvatarFallback>Profile Image</AvatarFallback>
               </Avatar>
             </div>
-            <div className="grid gap-3">
+            <div className="grid gap-3 mt-12">
               <Label htmlFor="sheet-demo-about">About</Label>
               <Input id="sheet-demo-about" type='text' value={about} onChange={e=> setAbout(e.target.value)} />
             </div>
@@ -132,7 +132,7 @@ transition-shadow duration-300'>
             <div className="grid gap-3">
               <div className="flex justify-between items-center">
                 <Label htmlFor="sheet-demo-password">Password</Label>
-                <Link to='/profile/forgot-password'><p className="text-[12px] underline cursor-pointer">Forgot password</p></Link>
+                <Link to='/main/profile/forgot-password'><p className="text-[12px] underline cursor-pointer">Forgot password</p></Link>
               </div>
               <Input
                 id="sheet-demo-password"
@@ -172,9 +172,9 @@ transition-shadow duration-300'>
           </div>
           <p className="text-red-700 text-[12px]">{error}</p>
           <SheetFooter>
-            <Button type="submit" onClick={handleSaveChanges} className='bg-purple-900 hover:bg-purple-800 cursor-pointer'>{loading ? <Spinner/> : "Save Changes"}</Button>
+            <Button type="submit" onClick={handleSaveChanges} className='bg-gray-800 hover:bg-gray-900 cursor-pointer'>{loading ? <Spinner/> : "Save Changes"}</Button>
             <SheetClose asChild>
-              <Button variant="outline" className='cursor-pointer text-black bg-gray-600 border-0'>Close</Button>
+              <Button variant="outline" className='cursor-pointer text-white bg-transparent border-0'>Close</Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>

@@ -1,8 +1,7 @@
 import { NavBar } from "./NavBar";
-import { AppTabs } from './AppTabs';
 import { Outlet, useNavigate } from "react-router";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from '../utils/userSlice';
 import { BASE_URL } from '../utils/constants';
 import { useEffect } from "react";
@@ -13,13 +12,14 @@ export const Container = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(store=> store.user);
 
   const fetchUser = async ()=>{
     try{
       const user = await axios.get(BASE_URL + '/profile', {
         withCredentials: true
       });
-      dispatch(addUser(user.data.data))
+      dispatch(addUser(user?.data?.data))
     }
     catch(err){
       if(err.status === 401){
@@ -30,7 +30,9 @@ export const Container = () => {
   }
 
   useEffect(()=>{
-    fetchUser();
+    if(!user){
+      fetchUser();
+    }
   },[])
 
 
@@ -40,10 +42,8 @@ export const Container = () => {
 
     <NavBar/>
     
-    <div className="flex flex-col gap-y-4">
-      <AppTabs/>
-      <Outlet/>
-    </div>
+    <Outlet/>
+
     </>
   )
 }

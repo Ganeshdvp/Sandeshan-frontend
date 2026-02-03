@@ -13,7 +13,7 @@ export const NotFound = ({title}) => {
     const navigate = useNavigate();
 
   return (
-     <Empty>
+     <Empty className='-ml-[10%]'>
       <EmptyHeader>
         <EmptyTitle className='text-white'>No {title} Found!</EmptyTitle>
         <EmptyDescription>
@@ -21,7 +21,7 @@ export const NotFound = ({title}) => {
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button className='cursor-pointer bg-purple-800' onClick={()=> navigate(-1)}>Go back</Button>
+        <Button className='cursor-pointer bg-gray-800' onClick={()=> navigate(-1)}>Go back</Button>
       </EmptyContent>
     </Empty>
   )

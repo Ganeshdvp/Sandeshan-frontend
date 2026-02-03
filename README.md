@@ -67,3 +67,51 @@ export default defineConfig({
    - created ForgotPassword.jsx file
    - created DropDown.jsx file
    - Protected Routes
+
+   # Task-4
+   - Install the WebSocket client
+   - create chat.jsx file
+   - created socket.js file
+     - import { io } from "socket.io-client";
+       import { BASE_URL } from './constants';
+
+       export const createSocketConnection = ()=>{
+            return io(BASE_URL)
+      }
+  - In chat.jsx,
+      -  useEffect(() => {
+    if (!store) return;
+
+    // establish the connection and joined in chat
+    const socket = createSocketConnection();
+    socket.emit("joinChat", {
+      firstName: store?.firstName,
+      ProfileImage: store?.ProfileImage,
+      loggedInUserId,
+      targetId,
+    });
+
+    // listening messages
+    socket.on("messageRecevied", ({firstName, ProfileImage,text})=>{
+      setAllMessages((prev)=> [...prev, {firstName,ProfileImage, text}])
+    })
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [loggedInUserId, targetId]);
+
+  - send message like this,
+  const handleSend = () => {
+    const socket = createSocketConnection();
+    socket.emit("sendMessage", {
+      firstName: store?.firstName,
+      ProfileImage: store?.ProfileImage,
+      loggedInUserId,
+      targetId,
+      text: message,
+    });
+    setMessage("");
+  };
+
+  - thats is !

@@ -41,20 +41,20 @@ export const DropDown = ({ children }) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-        <DropdownMenuContent className="mr-6 bg-purple-700 border-0">
-          <Link to="/profile">
-          <DropdownMenuItem className='text-white hover:bg-purple-800 cursor-pointer'>
-              <UserIcon color="white"/>
+        <DropdownMenuContent className="mr-6 bg-gray-100 border-0">
+          <Link to="/main/profile">
+          <DropdownMenuItem className='text-black hover:bg-gray-800 hover:text-white cursor-pointer'>
+              <UserIcon color="black"/>
               Profile
           </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem className='text-white hover:bg-purple-800 cursor-pointer'>
-            <SettingsIcon color="white"/>
+          <DropdownMenuItem className='text-black hover:bg-gray-800 hover:text-white cursor-pointer'>
+            <SettingsIcon color="black"/>
             Settings
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onClick={handleSignout} className='cursor-pointer hover:bg-purple-800'>
-            <LogOutIcon />
+          <DropdownMenuItem onClick={handleSignout} className='text-red-700 cursor-pointer hover:bg-red-800 hover:text-white'>
+            <LogOutIcon color="red"/>
             Log out
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -63,7 +63,7 @@ export const Login = () => {
 
       dispatch(addUser(signInData.data.data));
       setLoading(false)
-      navigate('/feed');
+      navigate('/main/feed');
     }
     catch(err){
       setSignInError("* "+ err.response.data.message)
@@ -101,10 +101,10 @@ export const Login = () => {
   return (
     <>
     <div className="absolute w-full h-full inset-1 bg-black/80 top-0 left-0 right-0 bottom-0">
-       <Card className={toggleForm ? "max-w-lg h-150 mx-auto mt-20 border-0 bg-purple-800 overflow-y-scroll shadow-[0_0_22px_rgba(168,85,247,0.35)] no-scrollbar" : "w-full max-w-md h-fit mx-auto mt-30 bg-purple-800 border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)]"}>
+       <Card className={toggleForm ? "max-w-lg h-150 mx-auto mt-20 border-0 bg-white overflow-y-scroll shadow-[0_0_22px_rgba(168,85,247,0.35)] no-scrollbar" : "w-full max-w-md h-fit mx-auto mt-30 bg-white border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)]"}>
         <CardHeader>
-          <CardTitle className='text-2xl text-white'>{toggleForm ? "Create your account" : "Login to your account"}</CardTitle>
-          <CardDescription  className='text-gray-300'>
+          <CardTitle className='text-2xl text-black'>{toggleForm ? "Create your account" : "Login to your account"}</CardTitle>
+          <CardDescription  className='text-gray-500'>
             {toggleForm ? "Create your account to communicate with others" : "Enter your email below to login to your account"}
           </CardDescription>
         </CardHeader>
@@ -114,7 +114,7 @@ export const Login = () => {
               {
                 toggleForm && (
                     <>
-                    <div className="grid gap-2 text-white">
+                    <div className="grid gap-2 text-black">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
@@ -125,7 +125,7 @@ export const Login = () => {
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
-              <div className="grid gap-2 text-white">
+              <div className="grid gap-2 text-black">
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
@@ -139,7 +139,7 @@ export const Login = () => {
                     </>
                 )
               }
-              <div className="grid gap-2 text-white">
+              <div className="grid gap-2 text-black">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -150,7 +150,7 @@ export const Login = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="grid gap-2 text-white">
+              <div className="grid gap-2 text-black">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   {
@@ -170,7 +170,7 @@ export const Login = () => {
               {
                 toggleForm && (
                     <>
-                    <div className="grid gap-2 text-white">
+                    <div className="grid gap-2 text-black">
                 <Label htmlFor="age">Age</Label>
                 <Input
                   id="age"
@@ -181,7 +181,7 @@ export const Login = () => {
                   onChange={(e) => setAge(e.target.value)}
                 />
               </div>
-              <div className="grid gap-2 text-white">
+              <div className="grid gap-2 text-black">
                 <Label>Gender</Label>
                 <Select value={gender} onValueChange={setGender} className='bg-transparent'>
                   <SelectTrigger className="w-full max-w-48">
@@ -197,7 +197,7 @@ export const Login = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid gap-2 text-white">
+              <div className="grid gap-2 text-black">
                 <Label htmlFor="age">Location</Label>
                 <Input
                   id="age"
@@ -208,7 +208,7 @@ export const Login = () => {
                   onChange={(e) => setLocation(e.target.value)}
                 />
               </div>
-               <div className="grid gap-2 text-white">
+               <div className="grid gap-2 text-black">
                 <Label htmlFor="about">About</Label>
                 <Textarea
                   id="about"
@@ -227,7 +227,7 @@ export const Login = () => {
           <p className="text-red-600 text-[12px]">{toggleForm ? signUpError : signInError}</p>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full bg-purple-950 cursor-pointer hover:bg-purple-900" onClick={toggleForm ? handleSignUpSubmit : handleSignInSubmit}>
+          <Button type="submit" className="w-full bg-black cursor-pointer hover:bg-gray-800 hover:scale-102" onClick={toggleForm ? handleSignUpSubmit : handleSignInSubmit}>
             {
               loading ? <Spinner/> : (
                 toggleForm ? "Sign Up" : "Login"
@@ -235,7 +235,7 @@ export const Login = () => {
             }
           </Button>
           <CardAction>
-            <Button className={toggleForm ? "cursor-pointer text-[12px] text-white ml-32" : "cursor-pointer text-[12px] text-white ml-22"} variant="link" onClick={()=> setToggleForm(!toggleForm)}>{toggleForm ? "Already have an account ? Login" : "Don't you have an account? Sign Up"}</Button>
+            <Button className={toggleForm ? "cursor-pointer text-[12px] text-black ml-32" : "cursor-pointer text-[12px] text-black ml-22"} variant="link" onClick={()=> setToggleForm(!toggleForm)}>{toggleForm ? "Already have an account ? Login" : "Don't you have an account? Sign Up"}</Button>
           </CardAction>
         </CardFooter>
       </Card>

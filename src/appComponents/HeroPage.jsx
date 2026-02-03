@@ -1,4 +1,4 @@
-import { InfoIcon, MessageCircle, MoveRight } from "lucide-react";
+import { ChevronsUp, InfoIcon, LayoutTemplate, MessageCircle, MoveRight, ShieldCheck, SoapDispenserDroplet } from "lucide-react";
 import { Button } from "../components/ui/button";
 import {
   Tooltip,
@@ -6,11 +6,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Link, useNavigate } from "react-router";
-import { Container } from "./Container";
 
 export const HeroPage = () => {
-
-  const navigate = useNavigate();
 
 
   return (
@@ -39,7 +36,7 @@ export const HeroPage = () => {
                 <InfoIcon color="white" className="mt-8 cursor-pointer" />
               </TooltipTrigger>
               <TooltipContent side={MoveRight}>
-                <p>Add to library</p>
+                <p>Real-time, Secure, Effortless Communication</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -57,7 +54,7 @@ export const HeroPage = () => {
           </div>
           <div className="relative left-20 -top-4 shadow-[0_20px_40px] bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
             <p className="text-white flex items-center gap-x-2">
-              <MessageCircle size={18} /> Fast & Reliable
+              <ChevronsUp size={18} /> Fast & Reliable
             </p>
             <p className="text-gray-400 text-sm">
               Optimized for performance to ensure low latency and a seamless
@@ -66,7 +63,7 @@ export const HeroPage = () => {
           </div>
           <div className="relative left-30 -top-2 bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
             <p className="text-white flex items-center gap-x-2">
-              <MessageCircle size={18} /> Cross-Platform Ready
+              <LayoutTemplate size={18} /> Cross-Platform Ready
             </p>
             <p className="text-gray-400 text-sm">
               Enjoy a consistent chat experience across desktop, tablet, and
@@ -75,7 +72,7 @@ export const HeroPage = () => {
           </div>
           <div className="relative -top-3 shadow-[0_20px_40px] bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
             <p className="text-white flex items-center gap-x-2">
-              <MessageCircle size={18} /> Secure Conversations
+              <ShieldCheck size={18} /> Secure Conversations
             </p>
             <p className="text-gray-400 text-sm">
               Your messages stay private with strong authentication and secure

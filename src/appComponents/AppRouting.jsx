@@ -1,9 +1,5 @@
 import { useSelector } from "react-redux";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { Container } from "./Container";
 import { Feed } from "./Feed";
 import { Requests } from "./Requests";
@@ -14,8 +10,7 @@ import { Profile } from "./Profile";
 import { ProfileEdit } from "./ProfileEdit";
 import { ForgotPassword } from "./ForgotPassword";
 import { Chat } from "./Chat";
-import { HeroPage } from './HeroPage';
-
+import { HeroPage } from "./HeroPage";
 
 export const AppRouting = () => {
   const user = useSelector((store) => store?.user);
@@ -23,12 +18,16 @@ export const AppRouting = () => {
   const appRouter = createBrowserRouter([
     {
       path: "/",
-      element: <Container />,
+      element: user ? <Navigate to="/main/feed" replace /> : <HeroPage />,
+    },
+    {
+      path: "/login",
+      element: user ? <Navigate to="/main/feed" replace /> : <Login />,
+    },
+    {
+      path: "/main",
+      element: !user ? <Navigate to="/login" replace /> : <Container />,
       children: [
-        {
-          path: "login",
-          element: user ? <Navigate to='/feed' replace/> : <Login />,
-        },
         {
           path: "feed",
           element: <Feed />,
@@ -62,10 +61,6 @@ export const AppRouting = () => {
         {
           path: "chat/:targetId",
           element: <Chat />,
-        },
-         {
-          path: "hero",
-          element: <HeroPage />,
         },
       ],
     },

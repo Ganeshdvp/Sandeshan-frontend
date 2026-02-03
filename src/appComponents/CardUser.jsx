@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Button } from "../components/ui/button"
+import { Button } from "../components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,79 +8,103 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from "../utils/constants";
 import { useState } from "react";
-import { Spinner } from '../components/ui/spinner';
-import { toast } from "sonner"
+import { Spinner } from "../components/ui/spinner";
+import { toast } from "sonner";
+import { AudioWaveform, CircleSmall, MapPin, Mars, VenusAndMars } from "lucide-react";
 
-export const CardUser = ({data}) => {
+export const CardUser = ({ data }) => {
+  const {
+    _id,
+    ProfileImage,
+    firstName,
+    lastName,
+    age,
+    gender,
+    location,
+    about,
+  } = data;
 
-    const {_id, ProfileImage, firstName, lastName, age, gender, location, about} = data
+  const [pending, setPending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
-    const [pending, setPending] = useState(false);
-    const [sent, setSent] = useState(false);
-    const [error, setError] = useState("")
-
-    // sent request logic
-    const handleSendRequest = async ()=>{
-      try{
-        setPending(true);
-        await axios.post(BASE_URL + `/user/requested/${_id}`, {}, {
-          withCredentials: true
-        });
-        setPending(false);
-        setSent(true);
-        toast.success("Request sent successfully!", {
-                    position: "top-right",
-                    style:{
-                      background:'#8B00E7',
-                      color:'#ffff',
-                      borderRadius:'5px',
-                      fontSize:'12px',
-                      width: "250px",
-                      height:'40px',
-                      border: 'none',
-                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
-                    }
-                  });
-      }
-      catch(err){
-        setPending(false);
-        setError("* " + err.response.data.message)
-        console.log(err);
-      }
+  // sent request logic
+  const handleSendRequest = async () => {
+    try {
+      setPending(true);
+      await axios.post(
+        BASE_URL + `/user/requested/${_id}`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      setPending(false);
+      setSent(true);
+      toast.success("Request sent successfully!", {
+        position: "top-right",
+        style: {
+          background: "black",
+          color: "#ffff",
+          borderRadius: "5px",
+          fontSize: "12px",
+          width: "250px",
+          height: "40px",
+          border:'none',
+          boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+        },
+      });
+    } catch (err) {
+      setPending(false);
+      setError("* " + err.response.data.message);
+      console.log(err);
     }
+  };
 
-    
+
   return (
     <>
-    <Card className="relative mx-auto w-75 max-w-sm pt-0 bg-purple-800 border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)] hover:scale-102 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)]
-transition-shadow duration-300 cursor-pointer">
-      <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
-      <img
-        src={ProfileImage}
-        alt="Event cover"
-        className="relative z-20 aspect-video w-full object-cover rounded-2xl"
-      />
-      <CardHeader>
-        <CardTitle className='-mt-2 text-xl text-white font-semibold'>{firstName + ' ' + lastName}</CardTitle>
-        <CardDescription className='text-gray-300'>
-          {about}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="text-white">
-          <p><span >Gender : </span>{gender}</p>
-          <p><span>Age : </span> {age}</p>
-          <p><span>Location : </span>{location}</p>
+      <Card className="flex flex-col cursor-pointer bg-black min-w-100 max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]">
+        <div className="flex items-center pl-4">
+          <img
+            src={ProfileImage}
+            alt="Event cover"
+            className=" w-15 h-15 object-fit rounded-full"
+          />
+          <CardHeader className='-ml-2'>
+            <CardTitle className="w-60 text-xl text-white font-semibold">
+              {firstName + " " + lastName}
+            </CardTitle>
+            <div className="text-white flex -mt-2 gap-x-2 items-center">
+              <p className="flex items-center text-[13px]" title="Gender"><Mars size={14} color="purple" style={{marginRight: '4px'}}/> {gender}</p>
+              <p className="flex items-center text-[13px]" title="Age"><VenusAndMars size={14} color="purple" style={{marginRight: '2px'}}/> {age}</p>
+              <p className="flex items-center text-[13px]" title="Location"><MapPin size={12} color="purple" style={{marginRight: '2px'}}/> {location}</p>
+            </div>
+          </CardHeader>
         </div>
-      </CardContent>
-      <CardFooter>
-        <Button disabled={sent || error} className="w-full bg-purple-950 cursor-pointer" onClick={handleSendRequest}>
-          {pending ? <Spinner/> : (sent ? "Sent Successfully!" : (error? <p className="text-red-700">Failed to send!</p> : "Send request"))}
-        </Button>
-      </CardFooter>
-    </Card>
+        <CardContent>
+          <CardDescription className="text-gray-300 pl-2">{about.length >130 ? about.slice(0,130) + "... more": about}</CardDescription>
+        </CardContent>
+        <CardFooter>
+          <Button
+            disabled={sent || error}
+            className="w-full bg-gray-800 text-white cursor-pointer hover:bg-gray-900 hover:scale-102"
+            onClick={handleSendRequest}
+          >
+            {pending ? (
+              <Spinner />
+            ) : sent ? (
+              "Sent Successfully!"
+            ) : error ? (
+              <p className="text-red-700">Failed to send!</p>
+            ) : (
+              "Send request"
+            )}
+          </Button>
+        </CardFooter>
+      </Card>
     </>
-  )
-}
+  );
+};

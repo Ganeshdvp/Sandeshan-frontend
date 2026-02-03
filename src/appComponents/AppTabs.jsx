@@ -1,53 +1,49 @@
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { Link } from "react-router";
 
 export const AppTabs = () => {
   return (
-    <Tabs
-      defaultValue="feed"
-      className="relative -top-2 mx-auto w-120 h-12 bg-black flex items-center rounded-2xl shadow-[0_10px_22px_rgba(168,85,247,0.35)]
-"
-    >
-      <TabsList className="bg-purple-800 text-white">
-        <Link to="/feed">
-          <TabsTrigger
-            value="feed"
-            className="w-20 active:scale-120 cursor-pointer hover:text-white"
-          >
-            Feed
-          </TabsTrigger>
+    <Tabs defaultValue="/main/feed">
+      <TabsList variant="line">
+        <Link to='/main/feed'>
+        <TabsTrigger
+          value="/main/feed"
+          className="mr-2 text-gray-600 hover:text-gray-500 data-[state=active]:border-b-white data-[state=active]:text-white cursor-pointer"
+        >
+          Feed
+        </TabsTrigger>
         </Link>
-        <Link to="/requests">
-          <TabsTrigger
-            value="requests"
-            className="w-20 active:scale-120 cursor-pointer hover:text-white"
-          >
-            Requests
-          </TabsTrigger>
+        <Link to='/main/requests'>
+        <TabsTrigger
+          value="/main/requests"
+          className="mr-2 text-gray-600 hover:text-gray-500 data-[state=active]:border-b-white data-[state=active]:text-white cursor-pointer"
+        >
+          Requests
+        </TabsTrigger>
         </Link>
-        <Link to="/friends">
-          <TabsTrigger
-            value="friends"
-            className="w-20 active:scale-120 cursor-pointer hover:text-white"
-          >
-            Friends
-          </TabsTrigger>
+        <Link to='/main/friends'>
+        <TabsTrigger
+          value="/main/friends"
+          className="mr-2 text-gray-600 hover:text-gray-500 data-[state=active]:border-b-white data-[state=active]:text-white cursor-pointer"
+        >
+          Friends
+        </TabsTrigger>
         </Link>
-        <Link to="/block">
-          <TabsTrigger
-            value="block"
-            className="w-24 active:scale-120 cursor-pointer hover:text-white"
-          >
-            Block users
-          </TabsTrigger>
+        <Link to='/main/block'>
+        <TabsTrigger
+          value="/main/blocked"
+          className="mr-2 text-gray-600 hover:text-gray-500 data-[state=active]:border-b-white data-[state=active]:text-white cursor-pointer"
+        >
+          Blocked Users
+        </TabsTrigger>
         </Link>
-        <Link to="/profile">
-          <TabsTrigger
-            value="profile"
-            className="w-24 active:scale-120 cursor-pointer hover:text-white"
-          >
-            Profile
-          </TabsTrigger>
+        <Link to='/main/profile'>
+        <TabsTrigger
+          value="/main/profile"
+          className="mr-2 text-gray-600 hover:text-gray-500 data-[state=active]:border-b-white data-[state=active]:text-white cursor-pointer"
+        >
+          Profile
+        </TabsTrigger>
         </Link>
       </TabsList>
     </Tabs>

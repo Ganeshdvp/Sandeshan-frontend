@@ -34,7 +34,7 @@ export const Feed = () => {
 
   return (
     <>
-    <div className="flex flex-wrap gap-y-8 mt-12 w-full p-6 bg-black">
+    <div className="flex flex-wrap items-center justify-start ml-[10%] gap-x-6 gap-y-6 mt-12 w-[90%] bg-black">
       {
       store?.map((card)=>{
         return (
