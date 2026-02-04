@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { NotFound } from "./NotFound";
 import { Link } from "react-router";
 import { MapPin, Mars, VenusAndMars } from "lucide-react";
+import { ShimmerUi } from './ShimmerUi';
 
 export const Friends = () => {
   const dispatch = useDispatch();
@@ -159,7 +160,7 @@ export const Friends = () => {
           );
         })
       ) : (
-        <NotFound title="Friends" />
+        store?.length === 0 ? <NotFound title="Friends" /> : <ShimmerUi/>
       )}
     </div>
   );

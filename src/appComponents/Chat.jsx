@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { Avatar, AvatarFallback, AvatarImage, AvatarBadge } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
-import { useOnlineStatus } from '../utils/useOnlineStatus';
+import { useOnlineStatus } from "../utils/useOnlineStatus";
 
 export const Chat = () => {
   const { targetId } = useParams();
@@ -14,8 +18,19 @@ export const Chat = () => {
   const store = useSelector((store) => store.user);
   const loggedInUserId = store?._id;
   const autoScrollRef = useRef(null);
-  const [targetName , setTargetName] = useState("");
+  const [targetUserData, setTargetUserData] = useState({});
   const onlineStatus = useOnlineStatus();
+
+
+  // time convert
+  const timeStamp = (time) => {
+    return new Date(time).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
+      // second: "2-digit"
+    });
+  };
 
   // fetch chat
   const fetchingChatData = async () => {
@@ -29,6 +44,7 @@ export const Chat = () => {
           firstName: msg?.senderId?.firstName,
           ProfileImage: msg?.senderId?.ProfileImage,
           text: msg?.text,
+          createdAt: msg?.createdAt,
         };
       });
       setAllMessages(filterData);
@@ -67,17 +83,20 @@ export const Chat = () => {
     // listening messages
     socket.on(
       "messageRecevied",
-      ({ loggedInUserId, firstName, ProfileImage, text }) => {
+      ({ loggedInUserId, firstName, ProfileImage, text, createdAt }) => {
         setAllMessages((prev) => [
           ...prev,
-          { loggedInUserId, firstName, ProfileImage, text },
+          { loggedInUserId, firstName, ProfileImage, text, createdAt },
         ]);
       },
     );
 
-    socket.on("joinedRoom", ({targetName})=>{
-      setTargetName(targetName);
-    })
+    socket.on("joinedRoom", ({ targetName, ProfileImage }) => {
+      setTargetUserData({
+        targetName,
+        ProfileImage,
+      });
+    });
 
     return () => {
       socket.disconnect();
@@ -89,22 +108,27 @@ export const Chat = () => {
     autoScrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [allMessages]);
 
+  
   return (
     <>
       <div className="ml-[25%] w-[50%] h-15 flex items-center pl-6 gap-x-2 shadow-[10px_10px_500px_rgba(100,100,500,0.55)]">
         <div className="flex items-end">
           <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        {onlineStatus === true ? <span className="w-2 h-2 -ml-2 z-10 bg-green-600 border border-green-600 rounded-full inline-block"></span> : ""}
+            <AvatarImage src={targetUserData?.ProfileImage} alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          {onlineStatus === true ? (
+            <span className="w-2 h-2 -ml-2 z-10 bg-green-600 border border-green-600 rounded-full inline-block"></span>
+          ) : (
+            ""
+          )}
         </div>
-        <p className="text-white">{targetName}</p>
+        <p className="text-white">{targetUserData?.targetName}</p>
       </div>
       <div className=" ml-[10%] w-[80%] h-130 flex flex-col">
         <div className="mx-auto w-[60%] h-[90%] rounded-2xl flex flex-col p-4">
           <div className="flex-1 overflow-y-auto space-y-4 no-scrollbar">
-            {allMessages.map((msg, index) => (
+            {allMessages?.map((msg, index) => (
               <div
                 key={index}
                 className={`flex ${
@@ -116,16 +140,20 @@ export const Chat = () => {
                 <div
                   className={`max-w-[70%] flex items-center gap-2 p-3 text-white shadow-md ${
                     msg?.loggedInUserId === targetId
-                      ? "bg-gray-900 rounded-r-2xl rounded-tl-2xl"
+                      ? "bg-gray-900 rounded-r-2xl rounded-tl-2xl flex-row-reverse"
                       : "bg-gray-900 rounded-l-2xl rounded-tr-2xl flex-row-reverse"
                   } hover:scale-[1.02] transition-transform duration-200
 `}
                 >
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={msg?.ProfileImage} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-
+                  <p
+                    className={
+                      msg?.loggedInUserId === targetId
+                        ? "text-[8px] text-gray-400 relative top-2 whitespace-nowrap self-end"
+                        : "text-[8px] relative top-2 text-gray-400 whitespace-nowrap self-end"
+                    }
+                  >
+                    {timeStamp(msg?.createdAt)}
+                  </p>
                   <p className="text-sm leading-relaxed warp-break-words">
                     {msg?.text}
                   </p>

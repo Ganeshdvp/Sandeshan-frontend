@@ -15,6 +15,7 @@ import {
 import { Spinner } from "../components/ui/spinner";
 import { toast } from "sonner";
 import { NotFound } from "./NotFound";
+import { ShimmerUi} from './ShimmerUi';
 import { MapPin, Mars, VenusAndMars } from "lucide-react";
 
 export const Requests = () => {
@@ -153,7 +154,7 @@ export const Requests = () => {
             );
           })
         ) : (
-          <NotFound title="Requests" />
+          store?.length === 0 ? <NotFound title="Requests" /> : <ShimmerUi/>
         )}
       </div>
     </>

@@ -16,6 +16,7 @@ import { NotFound } from './NotFound';
 import { MapPin, Mars, VenusAndMars } from "lucide-react";
 import { toast } from "sonner";
 import { Spinner } from "../components/ui/spinner";
+import { ShimmerUi } from './ShimmerUi';
 
 
 export const Block = () => {
@@ -23,8 +24,8 @@ export const Block = () => {
   const dispatch = useDispatch();
   const store = useSelector(store=> store.block);
 
-  const [unBlockLoading, setUnBlockLoading] = useState(false);
-  const [removeLoading, setRemoveLoading] = useState(false);
+  const [unBlockLoading, setUnBlockLoading] = useState(null);
+  const [removeLoading, setRemoveLoading] = useState(null);
 
 
 
@@ -44,11 +45,11 @@ export const Block = () => {
   // UnBlock logic
   const handleUnBlock = async (id)=>{
     try{
-      setUnBlockLoading(true)
-      const unblock = await axios.delete(BASE_URL + `/unblock/${id}`, {
+      setUnBlockLoading(id)
+      await axios.delete(BASE_URL + `/unblock/${id}`, {
         withCredentials: true
       });
-      setUnBlockLoading(false);
+      setUnBlockLoading(null);
       toast.success("Successfully unblocked!", {
               position: "bottom-right",
               style: {
@@ -64,7 +65,7 @@ export const Block = () => {
             });
     }
     catch(err){
-      setUnBlockLoading(false);
+      setUnBlockLoading(null);
       console.log(err)
     }
   }
@@ -72,11 +73,11 @@ export const Block = () => {
   // remove logic
     const handleRemove = async (id)=>{
     try{
-      setRemoveLoading(true);
-      const removed = await axios.patch(BASE_URL + `/remove/${id}`, {}, {
+      setRemoveLoading(id);
+      await axios.patch(BASE_URL + `/remove/${id}`, {}, {
         withCredentials: true
       });
-      setRemoveLoading(false);
+      setRemoveLoading(null);
       toast.success("Successfully removed!", {
               position: "bottom-right",
               style: {
@@ -92,7 +93,7 @@ export const Block = () => {
             });
     }
     catch(err){
-      setRemoveLoading(false);
+      setRemoveLoading(null);
       console.log(err);
     }
   }
@@ -111,7 +112,7 @@ export const Block = () => {
         {store?.length > 0 ? store?.map((request) => {
           return (
             <>
-              <Card className="flex flex-col cursor-pointer bg-black min-w-100 max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]" key={request?._id}>
+              <Card key={request?._id} className="flex flex-col cursor-pointer bg-black min-w-100 max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]">
                     <div className="flex items-center pl-4">
           <img
             src={request?.ProfileImage}
@@ -133,13 +134,13 @@ export const Block = () => {
           <CardDescription className="text-gray-300 pl-2">{request?.about.length >130 ? request?.about.slice(0,130) + "... more": request?.about}</CardDescription>
         </CardContent>
                 <CardFooter className='flex items-center gap-x-2 justify-end'>
-                  <Button className=' bg-gray-800 cursor-pointer hover:scale-103' disabled={unBlockLoading} onClick={()=> handleUnBlock(request._id)}>{unBlockLoading ? <Spinner/> : "Unblock"}</Button>
-                  <Button className='bg-transparent cursor-pointer' disabled={removeLoading} onClick={()=> handleRemove(request._id)}>{removeLoading ? <Spinner/> : "Remove"}</Button>
+                  <Button className=' bg-gray-800 cursor-pointer hover:scale-103' disabled={unBlockLoading === request?._id} onClick={()=> handleUnBlock(request?._id)}>{unBlockLoading === request?._id ? <Spinner/> : "Unblock"}</Button>
+                  <Button className='bg-transparent cursor-pointer' disabled={removeLoading === request?._id } onClick={()=> handleRemove(request?._id)}>{removeLoading === request?._id ? <Spinner/> : "Remove"}</Button>
                 </CardFooter>
               </Card>
             </>
           );
-        }) : <NotFound title='Blocked users' />}
+        }) : store?.length === 0 ? <NotFound title='Blocked users' /> : <ShimmerUi/>}
       </div>
     </>
   )

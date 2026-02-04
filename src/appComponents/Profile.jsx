@@ -10,13 +10,17 @@ import { Label } from "@/components/ui/label";
 import { Edit2Icon } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link, Outlet } from "react-router";
+import { ProfileShimmerUi } from './ProfileShimmerUi';
 
 export const Profile = () => {
   const store = useSelector((store) => store?.user);
 
   return (
     <>
-      <Card className="w-full max-w-2xl bg-gray-950 border-0 text-white mx-auto">
+      {
+        store ? (
+          <>
+          <Card className="w-full max-w-2xl bg-gray-950 border-0 text-white mx-auto">
         <CardHeader className="text-center text-2xl">
           {/* <CardTitle>Profile</CardTitle> */}
         </CardHeader>
@@ -74,6 +78,9 @@ export const Profile = () => {
         </CardContent>
       </Card>
       <Outlet/>
+          </>
+        ) : <ProfileShimmerUi/>
+      }
     </>
   );
 };
