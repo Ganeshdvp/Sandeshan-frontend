@@ -18,36 +18,59 @@ import { NotFound } from "./NotFound";
 import { Link } from "react-router";
 import { MapPin, Mars, VenusAndMars } from "lucide-react";
 import { ShimmerUi } from './ShimmerUi';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 
 export const Friends = () => {
   const dispatch = useDispatch();
   const store = useSelector((store) => store?.friend);
 
-  const [unfriendLoading, setUnFriendLoading] = useState("");
-  const [blockLoading, setBlockLoading] = useState("");
+  const [loading, setLoading] = useState(null);
 
   // fetch friends
-  const fetchFriends = async () => {
-    try {
+  const {data} = useQuery({
+    queryKey: ['friends'],
+    queryFn: async ()=>{
       const friends = await axios.get(BASE_URL + "/friends", {
         withCredentials: true,
       });
-      dispatch(addFriend(friends.data?.data));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+      return friends.data?.data;
+    },
+     retry: 2,
+    refetchOnWindowFocus : false,
+    gcTime: 1000*60*30,
+  })
+    useEffect(()=>{
+      if(data){
+        dispatch(addFriend(data))
+      }
+    },[data,dispatch]);
+  // const fetchFriends = async () => {
+  //   try {
+  //     const friends = await axios.get(BASE_URL + "/friends", {
+  //       withCredentials: true,
+  //     });
+  //     dispatch(addFriend(friends.data?.data));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // unfriend
-  const handleUnFriend = async (id) => {
-    try {
-      setUnFriendLoading(id);
+  const queryClient = useQueryClient();
+  const {mutate:unFriendMutate, isPending:unFriendPending} = useMutation({
+    mutationFn: async (id)=>{
       await axios.delete(BASE_URL + `/unfriend/${id}`, {
         withCredentials: true,
       });
-      setUnFriendLoading("");
-      toast.success("Successfully removed!", {
-        position: "bottom-right",
+    },
+    onSettled: ()=>{
+      setLoading(null);
+    },
+    onSuccess: ()=>{
+      queryClient.invalidateQueries({queryKey: ['friends']});
+       toast.success("Successfully unfriend!", {
+        position: "top-right",
         style: {
           background: "#0D0000",
           color: "#ffff",
@@ -59,26 +82,56 @@ export const Friends = () => {
           boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
         },
       });
-    } catch (err) {
-      setUnFriendLoading("");
-      console.log(err);
     }
-  };
+  })
+  const handleUnFriend = (id)=>{
+    setLoading(id);
+    unFriendMutate(id)
+  }
+  // const handleUnFriend = async (id) => {
+  //   try {
+  //     setUnFriendLoading(id);
+  //     await axios.delete(BASE_URL + `/unfriend/${id}`, {
+  //       withCredentials: true,
+  //     });
+  //     setUnFriendLoading("");
+  //     toast.success("Successfully removed!", {
+  //       position: "bottom-right",
+  //       style: {
+  //         background: "#0D0000",
+  //         color: "#ffff",
+  //         borderRadius: "5px",
+  //         fontSize: "12px",
+  //         width: "250px",
+  //         height: "40px",
+  //          border:'none',
+  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //       },
+  //     });
+  //   } catch (err) {
+  //     setUnFriendLoading("");
+  //     console.log(err);
+  //   }
+  // };
 
   // block logic
-  const handleBlockUsers = async (id) => {
-    try {
-      setBlockLoading(id);
-      await axios.post(
+  const {mutate:blockMutate, isPending:blockPending} = useMutation({
+    mutationFn: async (id)=>{
+       await axios.post(
         BASE_URL + `/blocked/${id}`,
         {},
         {
           withCredentials: true,
         },
       );
-      setBlockLoading("");
-      toast.success("You blocked successfully!", {
-        position: "bottom-right",
+    },
+    onSettled: ()=>{
+      setLoading(null);
+    },
+    onSuccess: ()=>{
+      queryClient.invalidateQueries({queryKey: ['friends']});
+       toast.success("Successfully blocked!", {
+        position: "top-right",
         style: {
           background: "#0D0000",
           color: "#ffff",
@@ -90,17 +143,47 @@ export const Friends = () => {
           boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
         },
       });
-    } catch (err) {
-      setBlockLoading("");
-      console.log(err);
     }
-  };
+  })
+  const handleBlockUsers = (id)=>{
+    setLoading(id);
+    blockMutate(id);
+  }
+  // const handleBlockUsers = async (id) => {
+  //   try {
+  //     setBlockLoading(id);
+  //     await axios.post(
+  //       BASE_URL + `/blocked/${id}`,
+  //       {},
+  //       {
+  //         withCredentials: true,
+  //       },
+  //     );
+  //     setBlockLoading("");
+  //     toast.success("You blocked successfully!", {
+  //       position: "bottom-right",
+  //       style: {
+  //         background: "#0D0000",
+  //         color: "#ffff",
+  //         borderRadius: "5px",
+  //         fontSize: "12px",
+  //         width: "250px",
+  //         height: "40px",
+  //          border:'none',
+  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //       },
+  //     });
+  //   } catch (err) {
+  //     setBlockLoading("");
+  //     console.log(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (!store) {
-      fetchFriends();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!store) {
+  //     fetchFriends();
+  //   }
+  // }, []);
 
   return (
     <div className="flex flex-wrap items-center justify-start ml-[10%] gap-x-6 gap-y-6 mt-12 w-[90%] bg-black">
@@ -136,8 +219,9 @@ export const Friends = () => {
                   <Button
                     className=" bg-transparent cursor-pointer"
                     onClick={() => handleUnFriend(request?._id)}
+                    disabled= {unFriendPending && loading === request?._id}
                   >
-                    {unfriendLoading === request?._id ? (
+                    {unFriendPending && loading === request?._id ? (
                       <Spinner />
                     ) : (
                       "Un Friend"
@@ -146,8 +230,9 @@ export const Friends = () => {
                   <Button
                     className="bg-transparent cursor-pointer"
                     onClick={() => handleBlockUsers(request?._id)}
+                    disabled = {blockPending && loading === request?._id}
                   >
-                    {blockLoading === request?._id ? <Spinner /> : "Block"}
+                    {blockPending && loading === request?._id ? <Spinner /> : "Block"}
                   </Button>
                   <Link to={`/main/chat/${request?._id}`}>
                     <Button className=" bg-gray-800 hover:bg-gray-900 hover:scale-103 cursor-pointer">

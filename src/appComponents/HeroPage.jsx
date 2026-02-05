@@ -5,13 +5,20 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
+import { Banner } from './Banner';
+import { useState } from "react";
 
 export const HeroPage = () => {
+
+  const [open, setOpen] = useState(true);
 
 
   return (
     <>
+    {
+      open && <Banner setOpen={setOpen}/>
+    }
       <h2 className="text-white text-2xl font-bold mt-8 ml-18">Sandeshan</h2>
       <section className="flex items-center gap-x-30 sm:gap-x-0 p-12 mt-14">
         <div className="w-200 ml-8">

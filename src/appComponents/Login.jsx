@@ -21,13 +21,15 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { Textarea } from '../components/ui/textarea';
-import axios from "axios";
 import { BASE_URL } from '../utils/constants';
 import { useDispatch } from "react-redux";
 import { addUser } from '../utils/userSlice';
-import { Outlet, useNavigate } from "react-router";
 import { Spinner } from "../components/ui/spinner";
 import { Link } from 'react-router';
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+
+
 
 export const Login = () => {
   const [firstName, setFirstName] = useState("");
@@ -40,44 +42,34 @@ export const Login = () => {
   const [about, setAbout] = useState("Hey there! Welcome to the Profile!");
 
   const [toggleForm, setToggleForm] = useState(false);
-
-  // loading state
-  const [loading, setLoading] = useState(false)
-
-  //error state
-  const [signInError, setSignInError] = useState("");
-  const [signUpError, setSignUpError] = useState("");
-
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   // submit Sign in form
-  const handleSignInSubmit = async () => {
-    try{
-      setLoading(true)
-      const signInData = await axios.post(BASE_URL + '/signin', {
+  const { mutate:signInMutation, isPending:signInPending ,error:sigInError} = useMutation({
+    mutationFn: async (data)=>{
+      const signInData = await axios.post(BASE_URL + '/signin', data , {withCredentials: true});
+      dispatch(addUser(signInData.data.data));
+    }
+  })
+  const handleSignInSubmit = ()=>{
+    const signInData = {
         emailId : email,
         password: password,
-      }, {withCredentials: true})
+      }
+    signInMutation(signInData);
+  }
 
-      dispatch(addUser(signInData.data.data));
-      setLoading(false)
-      navigate('/main/feed');
-    }
-    catch(err){
-      setSignInError("* "+ err.response.data.message)
-      setLoading(false)
-      console.log(err)
-    }
-  };
 
   
   // submit Sign Up form
-    const handleSignUpSubmit = async () => {
-    try{
-      setLoading(true)
-      const data = {
+    const { mutate:signUpMutation, isPending:signUpPending, error:signUpError} = useMutation({
+    mutationFn: async (data)=>{
+      await axios.post(BASE_URL + '/signup', data);
+       setToggleForm(false)
+    }
+  })
+  const handleSignUpSubmit = ()=>{
+    const signUpData = {
         firstName,
         lastName,
         emailId : email,
@@ -87,16 +79,53 @@ export const Login = () => {
         location,
         about,
       }
-      await axios.post(BASE_URL + '/signup', data)
-      setLoading(false)
-      setToggleForm(false)
-    }
-    catch(err){
-      setSignUpError("* "+ err.response.data.message)
-      setLoading(false)
-      console.log(err)
-    }
-  };
+    signUpMutation(signUpData);
+  }
+
+
+  // Plain fetching!
+   // const handleSignInSubmit = async () => {
+  //   try{
+  //     setLoading(true)
+  //     const signInData = await axios.post(BASE_URL + '/signin', {
+  //       emailId : email,
+  //       password: password,
+  //     }, {withCredentials: true})
+
+  //     dispatch(addUser(signInData.data.data));
+  //     setLoading(false)
+  //     navigate('/main/feed');
+  //   }
+  //   catch(err){
+  //     setSignInError("* "+ err.response.data.message)
+  //     setLoading(false)
+  //     console.log(err)
+  //   }
+  // };
+
+  //   const handleSignUpSubmit = async () => {
+  //   try{
+  //     setLoading(true)
+  //     const data = {
+  //       firstName,
+  //       lastName,
+  //       emailId : email,
+  //       password,
+  //       age,
+  //       gender,
+  //       location,
+  //       about,
+  //     }
+  //     await axios.post(BASE_URL + '/signup', data)
+  //     setLoading(false)
+  //     setToggleForm(false)
+  //   }
+  //   catch(err){
+  //     setSignUpError("* "+ err.response.data.message)
+  //     setLoading(false)
+  //     console.log(err)
+  //   }
+  // };
 
   return (
     <>
@@ -224,14 +253,12 @@ export const Login = () => {
               }
             </div>
           </form>
-          <p className="text-red-600 text-[12px]">{toggleForm ? signUpError : signInError}</p>
+          <p className="text-red-600 text-[12px]">{toggleForm ? signUpError?.response?.data?.message : sigInError?.response?.data?.message}</p>
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" className="w-full bg-black cursor-pointer hover:bg-gray-800 hover:scale-102" onClick={toggleForm ? handleSignUpSubmit : handleSignInSubmit}>
             {
-              loading ? <Spinner/> : (
-                toggleForm ? "Sign Up" : "Login"
-              )
+              toggleForm ? (signUpPending ? <Spinner/> : "Sign Up") : (signInPending ? <Spinner/> : "Login") 
             }
           </Button>
           <CardAction>

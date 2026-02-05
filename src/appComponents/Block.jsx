@@ -17,6 +17,7 @@ import { MapPin, Mars, VenusAndMars } from "lucide-react";
 import { toast } from "sonner";
 import { Spinner } from "../components/ui/spinner";
 import { ShimmerUi } from './ShimmerUi';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 export const Block = () => {
@@ -24,34 +25,55 @@ export const Block = () => {
   const dispatch = useDispatch();
   const store = useSelector(store=> store.block);
 
-  const [unBlockLoading, setUnBlockLoading] = useState(null);
-  const [removeLoading, setRemoveLoading] = useState(null);
+  const [loading, setLoading] = useState(null);
 
 
 
   // fetching blocked users
-  const fetchBlockUsers = async ()=>{
-    try{
+  const {data} = useQuery({
+    queryKey: ['block-users'],
+    queryFn: async ()=>{
       const blockUsers = await axios.get(BASE_URL + '/blocked-users', {
         withCredentials: true
       })
-      dispatch(addBlock(blockUsers?.data?.data))
+      return blockUsers?.data?.data;
+    },
+     retry: 2,
+    refetchOnWindowFocus : false,
+    gcTime: 1000*60*30,
+  })
+  useEffect(()=>{
+    if(data){
+      dispatch(addBlock(data))
     }
-    catch(err){
-      console.log(err)
-    }
-  }
+  },[data,dispatch]);
+  // const fetchBlockUsers = async ()=>{
+  //   try{
+  //     const blockUsers = await axios.get(BASE_URL + '/blocked-users', {
+  //       withCredentials: true
+  //     })
+  //     dispatch(addBlock(blockUsers?.data?.data))
+  //   }
+  //   catch(err){
+  //     console.log(err)
+  //   }
+  // }
 
   // UnBlock logic
-  const handleUnBlock = async (id)=>{
-    try{
-      setUnBlockLoading(id)
+  const queryClient = useQueryClient();
+  const {mutate:unBlockMutate, isPending:unBlockPending} = useMutation({
+    mutationFn: async (id)=>{
       await axios.delete(BASE_URL + `/unblock/${id}`, {
         withCredentials: true
       });
-      setUnBlockLoading(null);
-      toast.success("Successfully unblocked!", {
-              position: "bottom-right",
+    },
+    onSettled:()=>{
+      setLoading(null);
+    },
+    onSuccess: ()=>{
+      queryClient.invalidateQueries({queryKey: ['block-users']});
+        toast.success("Successfully unblocked!", {
+              position: "top-right",
               style: {
                 background: "#0D0000",
                 color: "#ffff",
@@ -64,22 +86,52 @@ export const Block = () => {
               },
             });
     }
-    catch(err){
-      setUnBlockLoading(null);
-      console.log(err)
-    }
+  })
+  const handleUnBlock = (id)=>{
+    setLoading(id);
+    unBlockMutate(id)
   }
+  // const handleUnBlock = async (id)=>{
+  //   try{
+  //     setUnBlockLoading(id)
+  //     await axios.delete(BASE_URL + `/unblock/${id}`, {
+  //       withCredentials: true
+  //     });
+  //     setUnBlockLoading(null);
+  //     toast.success("Successfully unblocked!", {
+  //             position: "bottom-right",
+  //             style: {
+  //               background: "#0D0000",
+  //               color: "#ffff",
+  //               borderRadius: "5px",
+  //               fontSize: "12px",
+  //               width: "250px",
+  //               height: "40px",
+  //                border:'none',
+  //               boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //             },
+  //           });
+  //   }
+  //   catch(err){
+  //     setUnBlockLoading(null);
+  //     console.log(err)
+  //   }
+  // }
 
   // remove logic
-    const handleRemove = async (id)=>{
-    try{
-      setRemoveLoading(id);
-      await axios.patch(BASE_URL + `/remove/${id}`, {}, {
+  const {mutate:removeMutate, isPending:removePending} = useMutation({
+    mutationFn: async (id)=>{
+        await axios.patch(BASE_URL + `/remove/${id}`, {}, {
         withCredentials: true
       });
-      setRemoveLoading(null);
-      toast.success("Successfully removed!", {
-              position: "bottom-right",
+    },
+      onSettled:()=>{
+      setLoading(null);
+    },
+    onSuccess: ()=>{
+      queryClient.invalidateQueries({queryKey: ['block-users']});
+        toast.success("Successfully removed!", {
+              position: "top-right",
               style: {
                 background: "#0D0000",
                 color: "#ffff",
@@ -92,18 +144,43 @@ export const Block = () => {
               },
             });
     }
-    catch(err){
-      setRemoveLoading(null);
-      console.log(err);
-    }
+  })
+  const handleRemove = (id)=>{
+    setLoading(id)
+    removeMutate(id);
   }
+  //   const handleRemove = async (id)=>{
+  //   try{
+  //     setRemoveLoading(id);
+  //     await axios.patch(BASE_URL + `/remove/${id}`, {}, {
+  //       withCredentials: true
+  //     });
+  //     setRemoveLoading(null);
+  //     toast.success("Successfully removed!", {
+  //             position: "bottom-right",
+  //             style: {
+  //               background: "#0D0000",
+  //               color: "#ffff",
+  //               borderRadius: "5px",
+  //               fontSize: "12px",
+  //               width: "250px",
+  //               height: "40px",
+  //                border:'none',
+  //               boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //             },
+  //           });
+  //   }
+  //   catch(err){
+  //     setRemoveLoading(null);
+  //     console.log(err);
+  //   }
+  // }
 
-
-  useEffect(()=>{
-    if(!store){
-      fetchBlockUsers();
-    }
-  },[])
+  // useEffect(()=>{
+  //   if(!store){
+  //     fetchBlockUsers();
+  //   }
+  // },[])
 
 
   return (
@@ -134,8 +211,8 @@ export const Block = () => {
           <CardDescription className="text-gray-300 pl-2">{request?.about.length >130 ? request?.about.slice(0,130) + "... more": request?.about}</CardDescription>
         </CardContent>
                 <CardFooter className='flex items-center gap-x-2 justify-end'>
-                  <Button className=' bg-gray-800 cursor-pointer hover:scale-103' disabled={unBlockLoading === request?._id} onClick={()=> handleUnBlock(request?._id)}>{unBlockLoading === request?._id ? <Spinner/> : "Unblock"}</Button>
-                  <Button className='bg-transparent cursor-pointer' disabled={removeLoading === request?._id } onClick={()=> handleRemove(request?._id)}>{removeLoading === request?._id ? <Spinner/> : "Remove"}</Button>
+                  <Button className=' bg-gray-800 cursor-pointer hover:scale-103' disabled={unBlockPending && loading === request?._id} onClick={()=> handleUnBlock(request?._id)}>{unBlockPending && loading === request?._id ? <Spinner/> : "Unblock"}</Button>
+                  <Button className='bg-transparent cursor-pointer' disabled={removePending && loading === request?._id } onClick={()=> handleRemove(request?._id)}>{removePending && loading === request?._id ? <Spinner/> : "Remove"}</Button>
                 </CardFooter>
               </Card>
             </>

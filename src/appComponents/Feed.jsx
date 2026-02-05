@@ -15,6 +15,7 @@ import {
   PaginationPrevious,
 } from "../components/ui/pagination";
 import { NotFound } from "./NotFound";
+import { useQuery } from "@tanstack/react-query";
 
 export const Feed = () => {
   const dispatch = useDispatch();
@@ -22,20 +23,36 @@ export const Feed = () => {
   const [page, setPage] = useState(1);
 
   // fetching all users
-  const fetchingAllUsers = async () => {
-    try {
-      const users = await axios.get(BASE_URL + `/users?page=${page}&limit=10`, {
-        withCredentials: true,
+  const {data, isError, error} = useQuery({
+    queryKey: ['feed', page],
+    queryFn: async ()=>{
+      const users = await axios.get(BASE_URL + `/users?page=${page}&limit=10`,{
+        withCredentials:true
       });
-      dispatch(addFeed(users.data?.data));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+      return users.data?.data;
+    },
+    retry: 2,
+    refetchOnWindowFocus : false,
+    gcTime: 1000*60*30,
+  })
+  if(isError){
+    console.log(error);
+  }
+  // const fetchingAllUsers = async () => {
+  //   try {
+  //     const users = await axios.get(BASE_URL + `/users?page=${page}&limit=10`, {
+  //       withCredentials: true,
+  //     });
+  //     dispatch(addFeed(users.data?.data));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
   useEffect(() => {
-    fetchingAllUsers();
-  }, [page]);
+    if(data){
+      dispatch(addFeed(data));
+    }
+  }, [data,dispatch]);
 
   return (
     <>

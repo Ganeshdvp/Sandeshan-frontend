@@ -15,7 +15,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
@@ -23,6 +23,7 @@ import { BASE_URL } from '../utils/constants';
 import { addUser } from '../utils/userSlice';
 import { toast } from 'sonner';
 import { Spinner } from '../components/ui/spinner';
+import { useMutation } from "@tanstack/react-query";
 
 
 export const ProfileEdit = () => {
@@ -43,14 +44,34 @@ export const ProfileEdit = () => {
 
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("")
+  // save changes
+  const {mutate, isPending, error} = useMutation({
+    mutationFn: async (edit)=>{
+         const editData = await axios.patch(BASE_URL + '/profile/edit', edit, {
+        withCredentials: true
+      });
+      dispatch(addUser(editData.data.data));
+      setOpen(false)
+      navigate('/main/profile');
+       toast.success("Profile was updated successfully!", {
+        position: "top-right",
+        style: {
+          background: "black",
+          color: "#ffff",
+          borderRadius: "5px",
+          fontSize: "12px",
+          width: "250px",
+          height: "40px",
+            border:'none',
+          boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+        },
+      });
+    },
+  })
 
-  const handleSaveChanges = async ()=>{
-    try{
-      setLoading(true);
-      const edit = {
-        firstName,
+  const handleSaveChanges = ()=>{
+    mutate({
+      firstName,
         lastName,
         age,
         gender,
@@ -58,33 +79,47 @@ export const ProfileEdit = () => {
         about,
         ProfileImage: profileImage,
         bgImage: bgImage
-      }
-      const editData = await axios.patch(BASE_URL + '/profile/edit', edit, {
-        withCredentials: true
-      })
-      dispatch(addUser(editData.data.data));
-      setLoading(false)
-      setOpen(false);
-      toast.success("Profile was updated successfully!", {
-                    position: "top-right",
-                    style:{
-                      background:'#8B00E7',
-                      color:'#ffff',
-                      borderRadius:'5px',
-                      fontSize:'12px',
-                      width: "250px",
-                      height:'40px',
-                      border: 'none',
-                      boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
-                    }
-                  });
-    }
-    catch(err){
-         setLoading(false);
-         setError(err.response.data.message)
-      console.log(err)
-    }
+    })
   }
+  // const handleSaveChanges = async ()=>{
+  //   try{
+  //     setLoading(true);
+  //     const edit = {
+  //       firstName,
+  //       lastName,
+  //       age,
+  //       gender,
+  //       location,
+  //       about,
+  //       ProfileImage: profileImage,
+  //       bgImage: bgImage
+  //     }
+  //     const editData = await axios.patch(BASE_URL + '/profile/edit', edit, {
+  //       withCredentials: true
+  //     })
+  //     dispatch(addUser(editData.data.data));
+  //     setLoading(false)
+  //     setOpen(false);
+  //     toast.success("Profile was updated successfully!", {
+  //                   position: "top-right",
+  //                   style:{
+  //                     background:'#8B00E7',
+  //                     color:'#ffff',
+  //                     borderRadius:'5px',
+  //                     fontSize:'12px',
+  //                     width: "250px",
+  //                     height:'40px',
+  //                     border: 'none',
+  //                     boxShadow:'0 10px 22px rgba(168,85,247,0.35)'
+  //                   }
+  //                 });
+  //   }
+  //   catch(err){
+  //        setLoading(false);
+  //        setError(err.response.data.message)
+  //     console.log(err)
+  //   }
+  // }
 
   return (
     <>
@@ -170,9 +205,9 @@ transition-shadow duration-300'>
               <Input id="sheet-demo-location" type='text' value={bgImage} onChange={e=> setBgImage(e.target.value)} />
             </div>
           </div>
-          <p className="text-red-700 text-[12px]">{error}</p>
+          <p className="text-red-700 text-[12px]">{error?.response?.data?.message}</p>
           <SheetFooter>
-            <Button type="submit" onClick={handleSaveChanges} className='bg-gray-800 hover:bg-gray-900 cursor-pointer'>{loading ? <Spinner/> : "Save Changes"}</Button>
+            <Button type="submit" onClick={handleSaveChanges} className='bg-gray-800 hover:bg-gray-900 cursor-pointer'>{isPending ? <Spinner/> : "Save Changes"}</Button>
             <SheetClose asChild>
               <Button variant="outline" className='cursor-pointer text-white bg-transparent border-0'>Close</Button>
             </SheetClose>

@@ -9,10 +9,11 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { BASE_URL } from "../utils/constants";
-import { useState } from "react";
 import { Spinner } from "../components/ui/spinner";
 import { toast } from "sonner";
-import { AudioWaveform, CircleSmall, MapPin, Mars, VenusAndMars } from "lucide-react";
+import { MapPin, Mars, VenusAndMars } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 
 export const CardUser = ({ data }) => {
   const {
@@ -26,24 +27,17 @@ export const CardUser = ({ data }) => {
     about,
   } = data;
 
-  const [pending, setPending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState("");
-
+  const queryClient = useQueryClient();
   // sent request logic
-  const handleSendRequest = async () => {
-    try {
-      setPending(true);
+  const {mutate, isError, isPending, isSuccess} = useMutation({
+    mutationFn: async (id)=>{
       await axios.post(
-        BASE_URL + `/user/requested/${_id}`,
-        {},
-        {
-          withCredentials: true,
-        },
+        BASE_URL + `/user/requested/${id}`,{},{withCredentials: true},
       );
-      setPending(false);
-      setSent(true);
-      toast.success("Request sent successfully!", {
+    },
+    onSuccess: ()=>{
+      queryClient.invalidateQueries({queryKey:['feed']})
+       toast.success("Request sent successfully!", {
         position: "top-right",
         style: {
           background: "black",
@@ -56,12 +50,42 @@ export const CardUser = ({ data }) => {
           boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
         },
       });
-    } catch (err) {
-      setPending(false);
-      setError("* " + err.response.data.message);
-      console.log(err);
     }
-  };
+  })
+  const handleSendRequest = ()=>{
+    mutate(_id)
+  }
+  // const handleSendRequest = async () => {
+  //   try {
+  //     setPending(true);
+  //     await axios.post(
+  //       BASE_URL + `/user/requested/${_id}`,
+  //       {},
+  //       {
+  //         withCredentials: true,
+  //       },
+  //     );
+  //     setPending(false);
+  //     setSent(true);
+  //     toast.success("Request sent successfully!", {
+  //       position: "top-right",
+  //       style: {
+  //         background: "black",
+  //         color: "#ffff",
+  //         borderRadius: "5px",
+  //         fontSize: "12px",
+  //         width: "250px",
+  //         height: "40px",
+  //         border:'none',
+  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //       },
+  //     });
+  //   } catch (err) {
+  //     setPending(false);
+  //     setError("* " + err.response.data.message);
+  //     console.log(err);
+  //   }
+  // };
 
 
   return (
@@ -89,15 +113,15 @@ export const CardUser = ({ data }) => {
         </CardContent>
         <CardFooter>
           <Button
-            disabled={sent || error}
+            disabled={isSuccess || isError}
             className="w-full bg-gray-800 text-white cursor-pointer hover:bg-gray-900 hover:scale-102"
             onClick={handleSendRequest}
           >
-            {pending ? (
+            {isPending ? (
               <Spinner />
-            ) : sent ? (
+            ) : isSuccess ? (
               "Sent Successfully!"
-            ) : error ? (
+            ) : isError ? (
               <p className="text-red-700">Failed to send!</p>
             ) : (
               "Send request"

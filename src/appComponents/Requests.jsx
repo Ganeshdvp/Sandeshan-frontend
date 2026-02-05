@@ -17,30 +17,52 @@ import { toast } from "sonner";
 import { NotFound } from "./NotFound";
 import { ShimmerUi} from './ShimmerUi';
 import { MapPin, Mars, VenusAndMars } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Requests = () => {
   const dispatch = useDispatch();
   const store = useSelector((store) => store.request);
 
-  const [acceptLoading, setAcceptLoading] = useState("");
-  const [rejectLoading, setRejectLoading] = useState("");
+  const [acceptLoading, setAcceptLoading] = useState(null);
+  const [rejectLoading, setRejectLoading] = useState(null);
+
+    const queryClient = useQueryClient();
+
 
   // fetch requests
-  const fetchRequests = async () => {
-    try {
+  const {data} = useQuery({
+    queryKey: ['requests'],
+    queryFn: async ()=>{
       const requests = await axios.get(BASE_URL + "/requests", {
         withCredentials: true,
       });
       dispatch(addRequest(requests.data?.data));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    },
+    retry: 2,
+    refetchOnWindowFocus : false,
+    gcTime: 1000*60*30,
+  })
+      useEffect(()=>{
+        if(data){
+          dispatch(addRequest(data))
+        }
+      },[data,dispatch]);
+  // const fetchRequests = async () => {
+  //   try {
+  //     const requests = await axios.get(BASE_URL + "/requests", {
+  //       withCredentials: true,
+  //     });
+  //     dispatch(addRequest(requests.data?.data));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // handle accept
-  const handleAccept = async (id, accepted) => {
-    try {
-      setAcceptLoading(id);
+   const {mutate:acceptMutate, isPending:acceptPending} = useMutation({
+    mutationFn: async ({id,accepted})=>{
       await axios.post(
         BASE_URL + `/requests/${accepted}/${id}`,
         {},
@@ -48,7 +70,12 @@ export const Requests = () => {
           withCredentials: true,
         },
       );
-      setAcceptLoading("");
+    },
+    onSettled: ()=>{
+      setAcceptLoading(null);
+    },
+    onSuccess: ()=>{
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
       toast.success("Aceepted the request successfully!", {
         position: "top-right",
         style: {
@@ -62,16 +89,45 @@ export const Requests = () => {
           boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
         },
       });
-    } catch (err) {
-      setAcceptLoading("");
-      console.log(err);
     }
-  };
+   })
+   const handleAccept = (id,accepted)=>{
+    setAcceptLoading(id);
+    acceptMutate({id,accepted})
+   }
+  // const handleAccept = async (id, accepted) => {
+  //   try {
+  //     setAcceptLoading(id);
+  //     await axios.post(
+  //       BASE_URL + `/requests/${accepted}/${id}`,
+  //       {},
+  //       {
+  //         withCredentials: true,
+  //       },
+  //     );
+  //     setAcceptLoading("");
+  //     toast.success("Aceepted the request successfully!", {
+  //       position: "top-right",
+  //       style: {
+  //         background: "black",
+  //         color: "#ffff",
+  //         borderRadius: "5px",
+  //         fontSize: "12px",
+  //         width: "250px",
+  //         height: "40px",
+  //           border:'none',
+  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //       },
+  //     });
+  //   } catch (err) {
+  //     setAcceptLoading("");
+  //     console.log(err);
+  //   }
+  // };
 
   // handle reject
-  const handleReject = async (id, rejected) => {
-    try {
-      setRejectLoading(id);
+  const {mutate:rejectMutate, isPending:rejectPending} = useMutation({
+    mutationFn: async ({id, rejected})=>{
       await axios.post(
         BASE_URL + `/requests/${rejected}/${id}`,
         {},
@@ -79,9 +135,14 @@ export const Requests = () => {
           withCredentials: true,
         },
       );
-      setRejectLoading("");
+    },
+    onSettled: ()=>{
+      setRejectLoading(null);
+    },
+    onSuccess: ()=>{
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
       toast.success("Rejected the request successfully!", {
-        position: "bottom-right",
+        position: "top-right",
         style: {
           background: "black",
           color: "#ffff",
@@ -89,21 +150,51 @@ export const Requests = () => {
           fontSize: "12px",
           width: "250px",
           height: "40px",
-             border:'none',
+          border:'none',
           boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
         },
       });
-    } catch (err) {
-      setRejectLoading("");
-      console.log(err);
     }
-  };
+  })
+  const handleReject = (id, rejected)=>{
+    setRejectLoading(id);
+    rejectMutate({id, rejected})
+  }
+  // const handleReject = async (id, rejected) => {
+  //   try {
+  //     setRejectLoading(id);
+  //     await axios.post(
+  //       BASE_URL + `/requests/${rejected}/${id}`,
+  //       {},
+  //       {
+  //         withCredentials: true,
+  //       },
+  //     );
+  //     setRejectLoading("");
+  //     toast.success("Rejected the request successfully!", {
+  //       position: "bottom-right",
+  //       style: {
+  //         background: "black",
+  //         color: "#ffff",
+  //         borderRadius: "5px",
+  //         fontSize: "12px",
+  //         width: "250px",
+  //         height: "40px",
+  //            border:'none',
+  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //       },
+  //     });
+  //   } catch (err) {
+  //     setRejectLoading("");
+  //     console.log(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (!store) {
-      fetchRequests();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!store) {
+  //     fetchRequests();
+  //   }
+  // }, []);
 
   return (
     <>
@@ -137,16 +228,18 @@ export const Requests = () => {
         </CardContent>
                   <CardFooter className="flex items-center gap-x-2 justify-end">
                     <Button
+                    disabled={acceptPending && acceptLoading === request?._id}
                       className=" bg-gray-800 cursor-pointer hover:scale-102 hover:bg-gray-900"
                       onClick={() => handleAccept(request?._id, "accepted")}
                     >
-                      {acceptLoading === request._id ? <Spinner /> : "Accept"}
+                      {acceptPending && acceptLoading === request?._id ? <Spinner /> : "Accept"}
                     </Button>
                     <Button
+                    disabled={rejectPending && rejectLoading === request?._id }
                       className="bg-transparent cursor-pointer"
                       onClick={() => handleReject(request?._id, "rejected")}
                     >
-                      {rejectLoading === request._id ? <Spinner /> : "Reject"}
+                      {rejectPending && rejectLoading === request?._id ? <Spinner /> : "Reject"}
                     </Button>
                   </CardFooter>
                 </Card>

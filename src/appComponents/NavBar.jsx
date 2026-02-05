@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { DropDown } from "./DropDown";
 import { AppTabs } from "./AppTabs";
 
-
 export const NavBar = () => {
 
   const store = useSelector(store=> store?.user);
