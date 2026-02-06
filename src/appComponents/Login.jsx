@@ -53,8 +53,7 @@ export const Login = () => {
       dispatch(addUser(signInData.data.data));
     }
   })
-  const handleSignInSubmit = (e)=>{
-    e.preventDefault();
+  const handleSignInSubmit = ()=>{
     const signInData = {
         emailId : email,
         password: password,
@@ -71,8 +70,7 @@ export const Login = () => {
        setToggleForm(false)
     }
   })
-  const handleSignUpSubmit = (e)=>{
-     e.preventDefault();
+  const handleSignUpSubmit = ()=>{
     const signUpData = {
         firstName,
         lastName,
@@ -142,7 +140,10 @@ export const Login = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={(e)=>{
+            e.preventDefault();
+            toggleForm ? handleSignUpSubmit() : handleSignInSubmit();
+          }}>
             <div className="flex flex-col gap-6">
               {
                 toggleForm && (
@@ -260,7 +261,7 @@ export const Login = () => {
           <p className="text-red-600 text-[12px]">{toggleForm ? signUpError?.response?.data?.message : sigInError?.response?.data?.message}</p>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full bg-black cursor-pointer hover:bg-gray-800 hover:scale-102" onClick={toggleForm ? handleSignUpSubmit : handleSignInSubmit}>
+          <Button type="submit" className="w-full bg-black cursor-pointer hover:bg-gray-800 hover:scale-102">
             {
               toggleForm ? (signUpPending ? <Spinner/> : "Sign Up") : (signInPending ? <Spinner/> : "Login") 
             }
