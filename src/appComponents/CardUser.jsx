@@ -27,8 +27,9 @@ export const CardUser = ({ data }) => {
     about,
   } = data;
 
+
+   // sent request logic
   const queryClient = useQueryClient();
-  // sent request logic
   const {mutate, isError, isPending, isSuccess} = useMutation({
     mutationFn: async (id)=>{
       await axios.post(

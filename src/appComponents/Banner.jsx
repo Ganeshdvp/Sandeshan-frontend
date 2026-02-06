@@ -1,7 +1,6 @@
 import { TriangleAlert } from "lucide-react";
 import { Button } from "../components/ui/button";
 
-
 export const Banner = ({setOpen}) => {
 
   return (

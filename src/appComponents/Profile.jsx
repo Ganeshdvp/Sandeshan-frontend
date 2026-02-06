@@ -1,9 +1,7 @@
 import {
   Card,
-
   CardContent,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
@@ -13,6 +11,7 @@ import { Link, Outlet } from "react-router";
 import { ProfileShimmerUi } from './ProfileShimmerUi';
 
 export const Profile = () => {
+  
   const store = useSelector((store) => store?.user);
 
   return (

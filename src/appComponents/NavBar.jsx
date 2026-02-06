@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage, AvatarBadge } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSelector } from "react-redux";
 import { DropDown } from "./DropDown";
 import { AppTabs } from "./AppTabs";

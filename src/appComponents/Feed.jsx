@@ -22,7 +22,7 @@ export const Feed = () => {
   const store = useSelector((store) => store.feed);
   const [page, setPage] = useState(1);
 
-  // fetching all users
+  // fetching all users with pagination
   const {data, isError, error} = useQuery({
     queryKey: ['feed', page],
     queryFn: async ()=>{
@@ -38,7 +38,14 @@ export const Feed = () => {
   if(isError){
     console.log(error);
   }
-  // const fetchingAllUsers = async () => {
+  useEffect(() => {
+    if(data){
+      dispatch(addFeed(data));
+    }
+  }, [data,dispatch]);
+
+
+    // const fetchingAllUsers = async () => {
   //   try {
   //     const users = await axios.get(BASE_URL + `/users?page=${page}&limit=10`, {
   //       withCredentials: true,
@@ -48,11 +55,6 @@ export const Feed = () => {
   //     console.log(err);
   //   }
   // };
-  useEffect(() => {
-    if(data){
-      dispatch(addFeed(data));
-    }
-  }, [data,dispatch]);
 
   return (
     <>

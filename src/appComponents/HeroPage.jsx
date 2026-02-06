@@ -1,4 +1,4 @@
-import { ChevronsUp, InfoIcon, LayoutTemplate, MessageCircle, MoveRight, ShieldCheck, SoapDispenserDroplet } from "lucide-react";
+import { ChevronsUp, InfoIcon, LayoutTemplate, MessageCircle, MoveRight, ShieldCheck } from "lucide-react";
 import { Button } from "../components/ui/button";
 import {
   Tooltip,

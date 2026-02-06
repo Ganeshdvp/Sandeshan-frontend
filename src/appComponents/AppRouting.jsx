@@ -13,8 +13,10 @@ import { Chat } from "./Chat";
 import { HeroPage } from "./HeroPage";
 
 export const AppRouting = () => {
+
   const user = useSelector((store) => store?.user);
 
+  // routes
   const appRouter = createBrowserRouter([
     {
       path: "/",

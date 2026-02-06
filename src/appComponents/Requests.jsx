@@ -22,14 +22,15 @@ import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const Requests = () => {
+
   const dispatch = useDispatch();
   const store = useSelector((store) => store.request);
 
   const [acceptLoading, setAcceptLoading] = useState(null);
   const [rejectLoading, setRejectLoading] = useState(null);
 
-    const queryClient = useQueryClient();
 
+  const queryClient = useQueryClient();
 
   // fetch requests
   const {data} = useQuery({
@@ -49,16 +50,6 @@ export const Requests = () => {
           dispatch(addRequest(data))
         }
       },[data,dispatch]);
-  // const fetchRequests = async () => {
-  //   try {
-  //     const requests = await axios.get(BASE_URL + "/requests", {
-  //       withCredentials: true,
-  //     });
-  //     dispatch(addRequest(requests.data?.data));
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   // handle accept
    const {mutate:acceptMutate, isPending:acceptPending} = useMutation({
@@ -95,35 +86,6 @@ export const Requests = () => {
     setAcceptLoading(id);
     acceptMutate({id,accepted})
    }
-  // const handleAccept = async (id, accepted) => {
-  //   try {
-  //     setAcceptLoading(id);
-  //     await axios.post(
-  //       BASE_URL + `/requests/${accepted}/${id}`,
-  //       {},
-  //       {
-  //         withCredentials: true,
-  //       },
-  //     );
-  //     setAcceptLoading("");
-  //     toast.success("Aceepted the request successfully!", {
-  //       position: "top-right",
-  //       style: {
-  //         background: "black",
-  //         color: "#ffff",
-  //         borderRadius: "5px",
-  //         fontSize: "12px",
-  //         width: "250px",
-  //         height: "40px",
-  //           border:'none',
-  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
-  //       },
-  //     });
-  //   } catch (err) {
-  //     setAcceptLoading("");
-  //     console.log(err);
-  //   }
-  // };
 
   // handle reject
   const {mutate:rejectMutate, isPending:rejectPending} = useMutation({
@@ -160,6 +122,48 @@ export const Requests = () => {
     setRejectLoading(id);
     rejectMutate({id, rejected})
   }
+
+  // const fetchRequests = async () => {
+  //   try {
+  //     const requests = await axios.get(BASE_URL + "/requests", {
+  //       withCredentials: true,
+  //     });
+  //     dispatch(addRequest(requests.data?.data));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // const handleAccept = async (id, accepted) => {
+  //   try {
+  //     setAcceptLoading(id);
+  //     await axios.post(
+  //       BASE_URL + `/requests/${accepted}/${id}`,
+  //       {},
+  //       {
+  //         withCredentials: true,
+  //       },
+  //     );
+  //     setAcceptLoading("");
+  //     toast.success("Aceepted the request successfully!", {
+  //       position: "top-right",
+  //       style: {
+  //         background: "black",
+  //         color: "#ffff",
+  //         borderRadius: "5px",
+  //         fontSize: "12px",
+  //         width: "250px",
+  //         height: "40px",
+  //           border:'none',
+  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //       },
+  //     });
+  //   } catch (err) {
+  //     setAcceptLoading("");
+  //     console.log(err);
+  //   }
+  // };
+
   // const handleReject = async (id, rejected) => {
   //   try {
   //     setRejectLoading(id);

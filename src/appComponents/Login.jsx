@@ -32,6 +32,7 @@ import { useMutation } from "@tanstack/react-query";
 
 
 export const Login = () => {
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("shiva@gmail.com");
@@ -41,11 +42,12 @@ export const Login = () => {
   const [location, setLocation] = useState("");
   const [about, setAbout] = useState("Hey there! Welcome to the Profile!");
 
+  // toggle the form
   const [toggleForm, setToggleForm] = useState(false);
   const dispatch = useDispatch();
 
   // submit Sign in form
-  const { mutate:signInMutation, isPending:signInPending ,error:sigInError} = useMutation({
+  const { mutate:signInMutation, isPending:signInPending , error:sigInError} = useMutation({
     mutationFn: async (data)=>{
       const signInData = await axios.post(BASE_URL + '/signin', data , {withCredentials: true});
       dispatch(addUser(signInData.data.data));
@@ -83,7 +85,7 @@ export const Login = () => {
   }
 
 
-  // Plain fetching!
+  // Sign in logic
    // const handleSignInSubmit = async () => {
   //   try{
   //     setLoading(true)

@@ -14,6 +14,7 @@ export const Container = () => {
   const navigate = useNavigate();
   const user = useSelector(store=> store.user);
 
+  // fetch user only
   const fetchUser = async ()=>{
     try{
       const user = await axios.get(BASE_URL + '/profile', {
@@ -42,6 +43,7 @@ export const Container = () => {
 
     <NavBar/>
     
+    {/* child routes render here */}
     <Outlet/>
 
     </>

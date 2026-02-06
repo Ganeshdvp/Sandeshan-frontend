@@ -15,7 +15,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
@@ -30,8 +30,10 @@ export const ProfileEdit = () => {
 
   const store = useSelector((store) => store?.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const [firstName, setFirstName] = useState(`${store?.firstName}`);
+// edit data feilds
+  const [firstName, setFirstName] = useState(`${store?.firstName}`);
   const [lastName, setLastName] = useState(`${store?.lastName}`);
   const [age, setAge] = useState(`${store?.age}`);
   const [gender, setGender] = useState(`${store?.gender}`);
@@ -42,9 +44,7 @@ export const ProfileEdit = () => {
 
   const [open, setOpen] = useState(true);
 
-  const navigate = useNavigate();
-
-  // save changes
+  // save changes logic
   const {mutate, isPending, error} = useMutation({
     mutationFn: async (edit)=>{
          const editData = await axios.patch(BASE_URL + '/profile/edit', edit, {
@@ -68,7 +68,6 @@ export const ProfileEdit = () => {
       });
     },
   })
-
   const handleSaveChanges = ()=>{
     mutate({
       firstName,

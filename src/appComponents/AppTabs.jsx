@@ -1,5 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Link, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 export const AppTabs = () => {
 

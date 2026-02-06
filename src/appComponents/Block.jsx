@@ -47,17 +47,6 @@ export const Block = () => {
       dispatch(addBlock(data))
     }
   },[data,dispatch]);
-  // const fetchBlockUsers = async ()=>{
-  //   try{
-  //     const blockUsers = await axios.get(BASE_URL + '/blocked-users', {
-  //       withCredentials: true
-  //     })
-  //     dispatch(addBlock(blockUsers?.data?.data))
-  //   }
-  //   catch(err){
-  //     console.log(err)
-  //   }
-  // }
 
   // UnBlock logic
   const queryClient = useQueryClient();
@@ -91,32 +80,6 @@ export const Block = () => {
     setLoading(id);
     unBlockMutate(id)
   }
-  // const handleUnBlock = async (id)=>{
-  //   try{
-  //     setUnBlockLoading(id)
-  //     await axios.delete(BASE_URL + `/unblock/${id}`, {
-  //       withCredentials: true
-  //     });
-  //     setUnBlockLoading(null);
-  //     toast.success("Successfully unblocked!", {
-  //             position: "bottom-right",
-  //             style: {
-  //               background: "#0D0000",
-  //               color: "#ffff",
-  //               borderRadius: "5px",
-  //               fontSize: "12px",
-  //               width: "250px",
-  //               height: "40px",
-  //                border:'none',
-  //               boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
-  //             },
-  //           });
-  //   }
-  //   catch(err){
-  //     setUnBlockLoading(null);
-  //     console.log(err)
-  //   }
-  // }
 
   // remove logic
   const {mutate:removeMutate, isPending:removePending} = useMutation({
@@ -149,6 +112,46 @@ export const Block = () => {
     setLoading(id)
     removeMutate(id);
   }
+
+   // const fetchBlockUsers = async ()=>{
+  //   try{
+  //     const blockUsers = await axios.get(BASE_URL + '/blocked-users', {
+  //       withCredentials: true
+  //     })
+  //     dispatch(addBlock(blockUsers?.data?.data))
+  //   }
+  //   catch(err){
+  //     console.log(err)
+  //   }
+  // }
+
+  // const handleUnBlock = async (id)=>{
+  //   try{
+  //     setUnBlockLoading(id)
+  //     await axios.delete(BASE_URL + `/unblock/${id}`, {
+  //       withCredentials: true
+  //     });
+  //     setUnBlockLoading(null);
+  //     toast.success("Successfully unblocked!", {
+  //             position: "bottom-right",
+  //             style: {
+  //               background: "#0D0000",
+  //               color: "#ffff",
+  //               borderRadius: "5px",
+  //               fontSize: "12px",
+  //               width: "250px",
+  //               height: "40px",
+  //                border:'none',
+  //               boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //             },
+  //           });
+  //   }
+  //   catch(err){
+  //     setUnBlockLoading(null);
+  //     console.log(err)
+  //   }
+  // }
+
   //   const handleRemove = async (id)=>{
   //   try{
   //     setRemoveLoading(id);

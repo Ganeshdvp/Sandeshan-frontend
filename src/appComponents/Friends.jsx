@@ -22,9 +22,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 export const Friends = () => {
+
   const dispatch = useDispatch();
   const store = useSelector((store) => store?.friend);
-
   const [loading, setLoading] = useState(null);
 
   // fetch friends
@@ -45,18 +45,8 @@ export const Friends = () => {
         dispatch(addFriend(data))
       }
     },[data,dispatch]);
-  // const fetchFriends = async () => {
-  //   try {
-  //     const friends = await axios.get(BASE_URL + "/friends", {
-  //       withCredentials: true,
-  //     });
-  //     dispatch(addFriend(friends.data?.data));
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
-  // unfriend
+  // unfriend logic
   const queryClient = useQueryClient();
   const {mutate:unFriendMutate, isPending:unFriendPending} = useMutation({
     mutationFn: async (id)=>{
@@ -88,31 +78,6 @@ export const Friends = () => {
     setLoading(id);
     unFriendMutate(id)
   }
-  // const handleUnFriend = async (id) => {
-  //   try {
-  //     setUnFriendLoading(id);
-  //     await axios.delete(BASE_URL + `/unfriend/${id}`, {
-  //       withCredentials: true,
-  //     });
-  //     setUnFriendLoading("");
-  //     toast.success("Successfully removed!", {
-  //       position: "bottom-right",
-  //       style: {
-  //         background: "#0D0000",
-  //         color: "#ffff",
-  //         borderRadius: "5px",
-  //         fontSize: "12px",
-  //         width: "250px",
-  //         height: "40px",
-  //          border:'none',
-  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
-  //       },
-  //     });
-  //   } catch (err) {
-  //     setUnFriendLoading("");
-  //     console.log(err);
-  //   }
-  // };
 
   // block logic
   const {mutate:blockMutate, isPending:blockPending} = useMutation({
@@ -149,6 +114,44 @@ export const Friends = () => {
     setLoading(id);
     blockMutate(id);
   }
+
+  // const fetchFriends = async () => {
+  //   try {
+  //     const friends = await axios.get(BASE_URL + "/friends", {
+  //       withCredentials: true,
+  //     });
+  //     dispatch(addFriend(friends.data?.data));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // const handleUnFriend = async (id) => {
+  //   try {
+  //     setUnFriendLoading(id);
+  //     await axios.delete(BASE_URL + `/unfriend/${id}`, {
+  //       withCredentials: true,
+  //     });
+  //     setUnFriendLoading("");
+  //     toast.success("Successfully removed!", {
+  //       position: "bottom-right",
+  //       style: {
+  //         background: "#0D0000",
+  //         color: "#ffff",
+  //         borderRadius: "5px",
+  //         fontSize: "12px",
+  //         width: "250px",
+  //         height: "40px",
+  //          border:'none',
+  //         boxShadow: "0 0px 20px rgba(255,255,255,0.15)",
+  //       },
+  //     });
+  //   } catch (err) {
+  //     setUnFriendLoading("");
+  //     console.log(err);
+  //   }
+  // };
+
   // const handleBlockUsers = async (id) => {
   //   try {
   //     setBlockLoading(id);
@@ -195,7 +198,7 @@ export const Friends = () => {
                 className="flex flex-col cursor-pointer bg-black min-w-100 max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]"
                 key={request?._id}
               >
-                 <div className="flex items-center pl-4">
+              <div className="flex items-center pl-4">
           <img
             src={request?.ProfileImage}
             alt="Event cover"

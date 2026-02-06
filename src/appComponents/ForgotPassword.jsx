@@ -21,8 +21,6 @@ import { toast } from "sonner";
 export const ForgotPassword = () => {
 
   const [newPassword, setNewPassword] = useState("");
-
-
   const navigate = useNavigate()
 
   // forgot password
@@ -51,7 +49,13 @@ export const ForgotPassword = () => {
     if(!newPassword.trim()) return;
     mutate(newPassword)
   }
-  // const forgotPassword = async ()=>{
+
+  // cancel button
+  const handleCancel = ()=>{
+    navigate(-1);
+  }
+
+   // const forgotPassword = async ()=>{
   //   try{
   //     if(!newPassword.trim()) return;
   //     setLoading(true);
@@ -67,11 +71,6 @@ export const ForgotPassword = () => {
   //     console.log(err);
   //   }
   // }
-
-  // cancel button
-  const handleCancel = ()=>{
-    navigate(-1);
-  }
 
   return (
     <>
@@ -98,15 +97,6 @@ export const ForgotPassword = () => {
                 />
               </div>
               <p className="text-red-700 text-[12px] -mt-4">{error?.response?.data?.message}</p>
-              {/* <div className="grid gap-2 text-black">
-                <Label htmlFor="lastName">Confirm Your Password</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Enter your last name"
-                  required
-                />
-              </div> */}
             </div>
           </form>
         </CardContent>

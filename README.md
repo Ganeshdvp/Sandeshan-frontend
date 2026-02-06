@@ -114,4 +114,13 @@ export default defineConfig({
     setMessage("");
   };
 
-  - thats is !
+  - thats it !
+
+  # Task -5
+  - Installed Tenstack query
+  - Created ShimmerUi
+  - Optimized the application
+
+
+
+
