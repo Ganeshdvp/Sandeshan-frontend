@@ -53,7 +53,8 @@ export const Login = () => {
       dispatch(addUser(signInData.data.data));
     }
   })
-  const handleSignInSubmit = ()=>{
+  const handleSignInSubmit = (e)=>{
+    e.preventDefault();
     const signInData = {
         emailId : email,
         password: password,
@@ -70,7 +71,8 @@ export const Login = () => {
        setToggleForm(false)
     }
   })
-  const handleSignUpSubmit = ()=>{
+  const handleSignUpSubmit = (e)=>{
+     e.preventDefault();
     const signUpData = {
         firstName,
         lastName,
