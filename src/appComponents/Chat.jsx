@@ -111,7 +111,7 @@ export const Chat = () => {
   
   return (
     <>
-      <div className="ml-[25%] w-[50%] h-15 flex items-center pl-6 gap-x-2 shadow-[10px_10px_500px_rgba(100,100,500,0.55)]">
+      <div className="mt-15 md:mt-0 w-[90%] mx-auto md:ml-[25%] md:w-[50%] md:h-15 flex items-center md:pl-6 gap-x-2 shadow-[10px_10px_500px_rgba(100,100,500,0.55)]">
         <div className="flex items-end">
           <Avatar>
             <AvatarImage src={targetUserData?.ProfileImage} alt="@shadcn" />
@@ -125,8 +125,8 @@ export const Chat = () => {
         </div>
         <p className="text-white">{targetUserData?.targetName}</p>
       </div>
-      <div className=" ml-[10%] w-[80%] h-130 flex flex-col">
-        <div className="mx-auto w-[60%] h-[90%] rounded-2xl flex flex-col p-4">
+      <div className="w-full md:ml-[10%] md:w-[80%] h-150 md:h-150 lg:h-130 flex flex-col">
+        <div className="mx-auto w-[80%] md:w-[60%] h-[90%] rounded-2xl flex flex-col p-4">
           <div className="flex-1 overflow-y-auto space-y-4 no-scrollbar">
             {allMessages?.map((msg, index) => (
               <div
@@ -164,13 +164,13 @@ export const Chat = () => {
           </div>
         </div>
 
-        <div className="mx-auto border p-4 rounded-4xl sm:w-[60%] text-white">
+        <div className="mx-auto border p-4 rounded-4xl w-[80%] md:w-[60%] text-white">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Enter your message"
-            className="w-[70%] md:w-[90%]  outline-none"
+            className="w-[75%] sm:w-[80%] md:w-[80%] lg:w-[80%] xl:w-[80%] 2xl:w-[90%] outline-none"
           />
           <button
             className="cursor-pointer bg-gray-800 p-1 pl-4 pr-4 rounded-2xl hover:bg-gray-900"

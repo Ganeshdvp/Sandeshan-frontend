@@ -75,7 +75,7 @@ export const ForgotPassword = () => {
   return (
     <>
     <div className="absolute w-full h-full inset-1 bg-black/80 top-0 left-0 right-0 bottom-0">
-       <Card value={newPassword} onValueChange={setNewPassword} className="w-full max-w-md h-85 mx-auto mt-30 bg-white border-0 shadow-[0_0_22px_rgba(255,255,255,0.35)]">
+       <Card value={newPassword} onValueChange={setNewPassword} className="w-full max-w-sm sm:max-w-md h-85 mx-auto mt-30 bg-white border-0 shadow-[0_0_22px_rgba(255,255,255,0.35)]">
         <CardHeader className='text-center mb-6'>
           <CardTitle className='text-2xl text-black'>Create Your Password</CardTitle>
           <CardDescription  className='text-gray-500'>
@@ -105,7 +105,7 @@ export const ForgotPassword = () => {
            {isPending ? <Spinner/> : "Submit"}
           </Button>
           <CardAction>
-            <Button onClick={handleCancel} className="cursor-pointer text-[12px] text-black ml-42 -mt-2" variant="link">Cancel</Button>
+            <Button onClick={handleCancel} className="cursor-pointer text-[12px] text-black ml-33 sm:ml-42 -mt-2" variant="link">Cancel</Button>
           </CardAction>
         </CardFooter>
       </Card>

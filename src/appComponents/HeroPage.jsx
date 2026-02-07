@@ -19,9 +19,11 @@ export const HeroPage = () => {
     {
       open && <Banner setOpen={setOpen}/>
     }
-      <h2 className="text-white text-2xl font-bold mt-8 ml-18">Sandeshan</h2>
-      <section className="flex items-center gap-x-30 sm:gap-x-0 p-12 mt-14">
-        <div className="w-200 ml-8">
+      <h2 className="text-white text-2xl font-bold mt-8 ml-[10%] sm:ml-18">Sandeshan</h2>
+
+
+      <section className="flex flex-col gap-y-20 mt-[10vh] w-full sm:items-center sm:gap-x-0 sm:p-12 sm:mt-14 sm:flex-row">
+        <div className="p-6 text-center sm:text-start sm:w-200 sm:ml-8">
           <h1 className="text-white text-5xl">
             Connect Instantly.
             <br /> Communicate Without Limits.
@@ -31,7 +33,7 @@ export const HeroPage = () => {
             security, and simplicity.Stay connected with friends, teams, and
             communities—anytime, anywhere.
           </p>
-          <div className="flex items-center gap-x-4">
+          <div className="flex justify-center sm:justify-start items-center gap-x-4">
             <Link to='/login'>
             <Button className="bg-white text-black p-4 mt-8 hover:bg-gray-400 cursor-pointer">
               Get Started Free
@@ -49,7 +51,7 @@ export const HeroPage = () => {
           </div>
         </div>
 
-        <div className="ml-18">
+        <div className="flex flex-col items-center gap-y-4 sm:ml-18">
           <div className="bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
             <p className="text-white flex items-center gap-x-2">
               <MessageCircle size={18} /> Real-time Messaging
@@ -59,7 +61,7 @@ export const HeroPage = () => {
               powered by modern web technologies
             </p>
           </div>
-          <div className="relative left-20 -top-4 shadow-[0_20px_40px] bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
+          <div className="sm:relative sm:left-20 sm:-top-8 p-4 shadow-[0_20px_40px] bg-gray-600 w-90 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
             <p className="text-white flex items-center gap-x-2">
               <ChevronsUp size={18} /> Fast & Reliable
             </p>
@@ -68,7 +70,7 @@ export const HeroPage = () => {
               chat experience.
             </p>
           </div>
-          <div className="relative left-30 -top-2 bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
+          <div className="sm:relative sm:left-30 sm:-top-10 bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
             <p className="text-white flex items-center gap-x-2">
               <LayoutTemplate size={18} /> Cross-Platform Ready
             </p>
@@ -77,7 +79,7 @@ export const HeroPage = () => {
               mobile devices.
             </p>
           </div>
-          <div className="relative -top-3 shadow-[0_20px_40px] bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
+          <div className="sm:relative sm:-top-16 shadow-[0_20px_40px] bg-gray-600 w-90 p-4 rounded-md flex flex-col gap-y-3 hover:scale-102 cursor-pointer">
             <p className="text-white flex items-center gap-x-2">
               <ShieldCheck size={18} /> Secure Conversations
             </p>

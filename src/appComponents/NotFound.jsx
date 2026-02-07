@@ -13,7 +13,7 @@ export const NotFound = ({title}) => {
     const navigate = useNavigate();
 
   return (
-     <Empty className='-ml-[10%]'>
+     <Empty>
       <EmptyHeader>
         <EmptyTitle className='text-white'>No {title} Found!</EmptyTitle>
         <EmptyDescription>

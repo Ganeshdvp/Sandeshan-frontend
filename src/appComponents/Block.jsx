@@ -188,11 +188,11 @@ export const Block = () => {
 
   return (
     <>
-     <div className="flex flex-wrap items-center justify-start ml-[10%] gap-x-6 gap-y-6 mt-12 w-[90%] bg-black">
+     <div className="flex flex-wrap items-center justify-center mx-auto gap-x-6 gap-y-6 mt-12 w-full bg-black">
         {store?.length > 0 ? store?.map((request) => {
           return (
             <>
-              <Card key={request?._id} className="flex flex-col cursor-pointer bg-black min-w-100 max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]">
+              <Card key={request?._id} className="flex flex-col cursor-pointer bg-black min-w-90 sm:min-w-100 max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]">
                     <div className="flex items-center pl-4">
           <img
             src={request?.ProfileImage}

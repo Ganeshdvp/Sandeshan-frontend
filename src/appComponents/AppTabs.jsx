@@ -7,7 +7,7 @@ export const AppTabs = () => {
   const navigate = useNavigate();
 
   return (
-    <Tabs value={location.pathname}>
+    <Tabs value={location.pathname} className='ml-[5vw] mt-10 w-[80vw] overflow-y-scroll md:w-110 md:mt-0 md:order-2 no-scrollbar'>
       <TabsList variant="line">
         <TabsTrigger
           value="/main/feed"

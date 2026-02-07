@@ -58,7 +58,7 @@ export const Feed = () => {
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-start ml-[10%] gap-x-6 gap-y-6 mt-12 w-[90%] bg-black">
+      <div className="flex flex-wrap items-center justify-center mx-auto gap-x-6 gap-y-6 mt-12 w-full">
         {store?.length > 0 ? (
           store?.map((card) => {
             return (

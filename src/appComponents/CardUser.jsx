@@ -91,7 +91,7 @@ export const CardUser = ({ data }) => {
 
   return (
     <>
-      <Card className="flex flex-col cursor-pointer bg-black min-w-100 max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]">
+      <Card className="flex flex-col cursor-pointer bg-black min-w-90 sm:min-w-100 sm:max-w-100 border border-white/50 shadow-[10px_10px_500px_rgba(10,10,50,0.35)]">
         <div className="flex items-center pl-4">
           <img
             src={ProfileImage}

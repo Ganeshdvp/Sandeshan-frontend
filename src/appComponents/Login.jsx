@@ -54,6 +54,7 @@ export const Login = () => {
     }
   })
   const handleSignInSubmit = ()=>{
+    if(!email || !password) return;
     const signInData = {
         emailId : email,
         password: password,
@@ -71,6 +72,7 @@ export const Login = () => {
     }
   })
   const handleSignUpSubmit = ()=>{
+    if(!firstName || !lastName || !email || !password || !age || !gender) return;
     const signUpData = {
         firstName,
         lastName,
@@ -132,7 +134,7 @@ export const Login = () => {
   return (
     <>
     <div className="absolute w-full h-full inset-1 bg-black/80 top-0 left-0 right-0 bottom-0">
-       <Card className={toggleForm ? "max-w-lg h-150 mx-auto mt-20 border-0 bg-white overflow-y-scroll shadow-[0_0_22px_rgba(168,85,247,0.35)] no-scrollbar" : "w-full max-w-md h-fit mx-auto mt-30 bg-white border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)]"}>
+       <Card className={toggleForm ? "max-w-sm sm:max-w-lg h-150 mx-auto mt-20 border-0 bg-white overflow-y-scroll shadow-[0_0_22px_rgba(168,85,247,0.35)] no-scrollbar" : "w-full max-w-sm sm:max-w-md h-fit mx-auto mt-30 bg-white border-0 shadow-[0_0_22px_rgba(168,85,247,0.35)]"}>
         <CardHeader>
           <CardTitle className='text-2xl text-black'>{toggleForm ? "Create your account" : "Login to your account"}</CardTitle>
           <CardDescription  className='text-gray-500'>
@@ -186,7 +188,7 @@ export const Login = () => {
                   <Label htmlFor="password">Password</Label>
                   {
                     !toggleForm && <Link to='/login'>
-                      <p className="ml-60 inline-block text-[12px] underline-offset-4 hover:underline">Forgot password</p>
+                      <p className="ml-40 sm:ml-60 inline-block text-[12px] underline-offset-4 hover:underline">Forgot password</p>
                     </Link>
                   }
                 </div>
@@ -264,7 +266,7 @@ export const Login = () => {
             }
           </Button>
           <CardAction>
-            <Button className={toggleForm ? "cursor-pointer text-[12px] text-black ml-32" : "cursor-pointer text-[12px] text-black ml-22"} variant="link" onClick={()=> setToggleForm(!toggleForm)}>{toggleForm ? "Already have an account ? Login" : "Don't you have an account? Sign Up"}</Button>
+            <Button className={toggleForm ? "cursor-pointer text-[12px] text-black ml-18 sm:ml-32" : "cursor-pointer text-[12px] text-black ml-16 sm:ml-22"} variant="link" onClick={()=> setToggleForm(!toggleForm)}>{toggleForm ? "Already have an account ? Login" : "Don't you have an account? Sign Up"}</Button>
           </CardAction>
         </CardFooter>
       </Card>
